@@ -15,6 +15,7 @@ MainWindow::~MainWindow()
   delete ui;
 }
 
+
 void MainWindow::on_pushButton_clicked()
 {
    QString str=ui->lineEdit->text();//Qstring 转换成数字,如果无法转换，会返回0
@@ -24,7 +25,6 @@ void MainWindow::on_pushButton_clicked()
    qDebug()<<strlist<<endl;
    int x=strlist[0].toInt();
    int y=strlist[1].toInt();
-
-    con.mouse_left_click(x,y);
-    con.Key_input("dsd2321");
+   con.mouse_left_click(x,y);
+   con.input_string("ssdsds");
 }
