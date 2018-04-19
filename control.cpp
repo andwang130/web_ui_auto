@@ -88,30 +88,39 @@ void CControl::Key_up(char str)
    keybd_event(str,0,KEYEVENTF_KEYUP,0);//松开这个键
 }
 
+//使用剪切版来实现输入
 void CControl::input_string(string str)
 {
-  HWND hwnd;
 
-  OpenClipboard(hwnd);   //打开剪切版
-  HANDLE h = GetClipboardData(CF_TEXT); //获得剪切版数据
+  OpenClipboard(NULL);   //打开剪切版,传入差数未空表示当前程序
+  //HANDLE h = GetClipboardData(CF_TEXT); //获得剪切版数据
   EmptyClipboard();//清空剪切版
-  HANDLE hHandle = GlobalAlloc(GMEM_FIXED, str.size()*4);//分配内存
+  HANDLE hHandle = GlobalAlloc(GMEM_FIXED, sizeof(str));//分配内存
   char * p=(char*) GlobalLock(hHandle);//锁定内存，返回锁定的内存的收地址,保存期间剪切版内容不变,p指向的是hHandel的首地址
 
   strcpy(p,str.data());//将str的内容复制到p的指针
-  cout<<p<<endl;
-   GlobalUnlock(hHandle);
-  SetClipboardData(CF_TEXT,hHandle);//这时候hHandel的内容已经复制为str的内容了
+
+  SetClipboardData(CF_TEXT,hHandle);
+//这时候hHandel的内容已经复制为str的内容了
+   cout<<hHandle<<endl;
+  GlobalUnlock(hHandle);
 
   CloseClipboard();//关闭剪切版
 
   keybd_event(17,0,0,0);//按下 ctrl键
   keybd_event(86,0,0,0);//按下V键GlobalUnlock(hHandle); //解除锁定
   Sleep(200);//休眠200毫秒
+ keybd_event(17,0,KEYEVENTF_KEYUP,0);//松开ctrl键
+ keybd_event(86,0,KEYEVENTF_KEYUP,0);//松开V键。完成复制操作
+ //把剪切版内容设置回去,未实现
+// OpenClipboard(NULL);
+//  EmptyClipboard();//清空剪切版
+//  HANDLE hw=GlobalAlloc(GMEM_FIXED, sizeof(h));//分配内存
+//  GlobalLock(hw);
+// SetClipboardData(CF_TEXT,h);
+//  GlobalUnlock(h);
+// CloseClipboard();
 
-//  keybd_event(17,0,KEYEVENTF_KEYUP,0);//松开ctrl键
-//  keybd_event(86,0,KEYEVENTF_KEYUP,0);//松开V键。完成复制操作
-//  SetClipboardData(CF_TEXT,h); //把剪切版内容设置回去
 
 
 }

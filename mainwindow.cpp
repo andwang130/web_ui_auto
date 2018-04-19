@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include<Qdebug>
 #include<QString>
@@ -26,5 +26,7 @@ void MainWindow::on_pushButton_clicked()
    int x=strlist[0].toInt();
    int y=strlist[1].toInt();
    con.mouse_left_click(x,y);
-   con.input_string("ssdsds");
+   con.input_string("大家好");
+
+
 }
