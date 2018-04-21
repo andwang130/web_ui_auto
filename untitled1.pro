@@ -26,11 +26,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    control.cpp
+    control.cpp \
+    opencv_code.cpp
 
 HEADERS += \
         mainwindow.h \
-    control.h
+    control.h \
+    opencv_code.h
 
 FORMS += \
         mainwindow.ui
+INCLUDEPATH +=D:\opencv\build\include \
+
+
+LIBS +=  D:\Program Files\opencv\build\x64\vc15\lib\opencv_world310d.lib \
