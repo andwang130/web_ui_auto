@@ -6,6 +6,7 @@
 
 QT       += core gui
 
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = untitled1
@@ -36,7 +37,16 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
-INCLUDEPATH +=D:\opencv\build\include \
 
 
-LIBS +=  D:\Program Files\opencv\build\x64\vc15\lib\opencv_world310d.lib \
+
+
+
+
+INCLUDEPATH += D:/opencv/build/include \
+    D:/opencv/build/include/opencv \
+    D:/opencv/build/include/opencv2 \
+
+
+
+ LIBS += D:/opencv/build/x64/vc14/lib/opencv_world341.lib

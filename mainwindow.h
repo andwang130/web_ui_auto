@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include<control.h>
+#include<opencv_code.h>
 namespace Ui {
   class MainWindow;
 }
@@ -21,6 +22,7 @@ private slots:
 private:
   Ui::MainWindow *ui;
   CControl con;
+  CMyOpencv MYcv;
 };
 
 #endif // MAINWINDOW_H

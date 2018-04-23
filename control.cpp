@@ -1,5 +1,4 @@
 #include<control.h>
-
 #pragma comment (lib, "User32.lib") //使用mouse_event需要的链接库
 void get_keycode(QString str)
 {
@@ -92,7 +91,7 @@ void CControl::input_string(string str)
 {
   HWND hwnd;
 
-  OpenClipboard(hwnd);   //打开剪切版
+  OpenClipboard(NULL);   //打开剪切版
   HANDLE h = GetClipboardData(CF_TEXT); //获得剪切版数据
   EmptyClipboard();//清空剪切版
   HANDLE hHandle = GlobalAlloc(GMEM_FIXED, str.size()*4);//分配内存
@@ -109,8 +108,8 @@ void CControl::input_string(string str)
   keybd_event(86,0,0,0);//按下V键GlobalUnlock(hHandle); //解除锁定
   Sleep(200);//休眠200毫秒
 
-//  keybd_event(17,0,KEYEVENTF_KEYUP,0);//松开ctrl键
-//  keybd_event(86,0,KEYEVENTF_KEYUP,0);//松开V键。完成复制操作
+  keybd_event(17,0,KEYEVENTF_KEYUP,0);//松开ctrl键
+  keybd_event(86,0,KEYEVENTF_KEYUP,0);//松开V键。完成复制操作
 //  SetClipboardData(CF_TEXT,h); //把剪切版内容设置回去
 
 
