@@ -1,8 +1,8 @@
 #include<control.h>
 #pragma comment (lib, "User32.lib") //使用mouse_event需要的链接库
-void get_keycode(QString str)
+void CControl::mouse_move(int x,int y)
 {
-
+ SetCursorPos(x,y);//鼠标移动
 }
 void CControl::mouse_left_click(int x,int y)
 {

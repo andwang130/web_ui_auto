@@ -28,12 +28,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     control.cpp \
-    opencv_code.cpp
+    opencv_code.cpp \
+    specific.cpp
 
 HEADERS += \
         mainwindow.h \
     control.h \
-    opencv_code.h
+    opencv_code.h \
+    specific.h
 
 FORMS += \
         mainwindow.ui

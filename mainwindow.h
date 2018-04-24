@@ -2,8 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include<control.h>
-#include<opencv_code.h>
+#include<specific.h>
 namespace Ui {
   class MainWindow;
 }
@@ -21,8 +20,7 @@ private slots:
 
 private:
   Ui::MainWindow *ui;
-  CControl con;
-  CMyOpencv MYcv;
+  Integration *integ;
 };
 
 #endif // MAINWINDOW_H

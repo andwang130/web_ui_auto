@@ -12,6 +12,7 @@ class CControl
 {
 
 public:
+void mouse_move(int x,int y);
 void mouse_left_click(int x,int y);//左键点击，带参数
 void mouse_left_click();//左键单击，原地点击
 
