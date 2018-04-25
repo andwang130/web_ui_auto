@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include<specific.h>
+#include<interpreter.h>
 namespace Ui {
   class MainWindow;
 }
@@ -20,7 +21,7 @@ private slots:
 
 private:
   Ui::MainWindow *ui;
-  Integration *integ;
+  Interpreter *integ;
 };
 
 #endif // MAINWINDOW_H
