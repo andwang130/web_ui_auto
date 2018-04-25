@@ -35,7 +35,7 @@ void Interpreter::run(string path)
 
           if(impt_code!="")
             {
-              fun_inte(impt_code,pre);  //该函数存在，为定义函数转到定义函数调用
+              fun_inte(st1[1],impt_code,pre);  //该函数存在，为定义函数转到定义函数调用
             }
           else
             {
@@ -85,7 +85,7 @@ void Interpreter::fun_inte(string fun_name,string code,string pre) //定义函�
     {
      if(isnum(pre_vec[i]))
        {
-         pre_int[pre_l[i]]=(int)pre_vec[i];
+         //pre_int[pre_l[i]]=stoi(pre_vec[i].c_str()); //字符串转整型报错了， 还未解决
        }
      else if(isStr(pre_vec[i]))
        {
@@ -93,12 +93,21 @@ void Interpreter::fun_inte(string fun_name,string code,string pre) //定义函�
        }
      else
        {
-         pre_list
+         string type=para_type[pre_l[i]];
+         if(type=="整型")
+           {
+             pre_int[pre_l[i]]=para_Int[pre_l[i]];
+           }
+         else if(type=="字符串")
+           {
+             pre_str[pre_l[i]]=para_str[pre_l[i]];
+           }
+
        }
     }
 
 }
-void Interpreter::get_pre(string pre_nmae)
+void Interpreter::get_pre(string pre_nmae,int &Int,string &str)
 {
 
 }
@@ -129,7 +138,7 @@ vector<string> Interpreter::split(string str,char pi) //自己写的一个字符
     }
   return str_ve;
 }
-bool isnum(string str) //判断一个字符串是否全是数字
+bool Interpreter::isnum(string str) //判断一个字符串是否全是数字
 {
   for(int i;i<str.size();i++)
     {
@@ -140,7 +149,7 @@ bool isnum(string str) //判断一个字符串是否全是数字
     }
   return true;
 }
-bool isStr(string str)
+bool Interpreter::isStr(string str)//判断字符串
 {
   char head=str.at(0);
   char end=str.at(str.size()-1);

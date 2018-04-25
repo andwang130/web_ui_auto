@@ -12,11 +12,14 @@ class Interpreter
 {
  private:
   map<string,string> para_type; //变量类型
-  map<string,int> Int;         //int型变量
-  map<string,string> str;     //字符型变量
+  map<string,int> para_Int;         //int型变量
+  map<string,string> para_str;     //字符型变量
   map<string,vector<string>> pre_list; //自定义函数变量名称集合
   map<string,string> fun_list;   //自定义函数代码
   vector<string> split(string str,char pi);  //字符串分割函数
+  bool isnum(string str);//判断一个字符串是否全是数字
+  bool isStr(string str);//判断字符串
+  void get_pre(string pre_nmae,int &Int,string &str);//获取变量
  public:
   void run(string path);
   void Variable_inte(string code);//
