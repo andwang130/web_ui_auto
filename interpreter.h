@@ -20,6 +20,13 @@ class Interpreter
   bool isnum(string str);//判断一个字符串是否全是数字
   bool isStr(string str);//判断字符串
   void get_pre(string pre_nmae,int &Int,string &str);//获取变量
+  int str_to_int(string str); //字符串转int函数
+  void Variable_inte(string var_name,map<string,int> &int_map,string value);//整型变量赋值
+  void Variable_inte(string var_name,map<string,string> &str_map,string value);//字符型变量赋值
+  void Variable_inte(string var_name, map<string, int> &int_map, map<string,string> &str_map,string var);//一个变量和另外一个变量赋值
+  void Variable_matching(string var_type,string var_name,map<string,string> &Vartype_map);//变量匹配
+  void Variable_matching(string var_type,string var_name,map<string,string> &Vartype_map,map<string,int> &int_map,map<string,string> &str_map,string value);
+  int var_Is_defined(string var_name,map<string,string> &Vartype_map);//判断变量是否定义,1在当前传递的map中定义，2在全局map定义，3未定义
  public:
   void run(string path);
   void Variable_inte(string code);//

@@ -42,15 +42,110 @@ void Interpreter::run(string path)
              built_func(st1[1],pre);    //没有找到，函数为内部函数，转到内部函数调用
             }
         }
-      else if(regex_match(code,st1,variable_re))
+      else if(regex_match(code,st1,variable_re)) //匹配变量定义
         {
 
-          cout<<st1[1]<<endl;
-          cout<<st1[2]<<endl;
+          Variable_matching(st1[1],st1[2],para_type);
         }
 
     }
 }
+void Interpreter::Variable_matching(string var_type,string var_name,map<string,string> &Vartype_map)//变量匹配
+{
+  if(var_type=="字符串")
+    {
+      Vartype_map[var_name]="字符串";
+    }
+  else if(var_type=="整型")
+    {
+       Vartype_map[var_name]="整型";
+    }
+}
+void Interpreter::Variable_matching(string var_type,string var_name,map<string,string> &Vartype_map,
+                                    map<string,int> &int_map,map<string,string> &str_map,string value)
+{
+  //变量定义匹配带赋值的
+  if(var_type=="整型")
+    {
+      Vartype_map[var_name]="整型";
+      Variable_inte(var_name,int_map,value);
+      int re=var_Is_defined(var_name,Vartype_map);
+      if(re==1)
+      {
+          Variable_inte(var_name,int_map,value);
+        }
+      else if(re==2)
+        {
+           Variable_inte(var_name,para_Int,value);
+        }
+       else
+        {
+          throw "变量未定义";
+        }
+    }
+  else if(var_type=="字符串")
+    {
+        Vartype_map[var_name]="字符串";
+       int re=var_Is_defined(var_name,Vartype_map);
+       if(re==1)
+       {
+           Variable_inte(var_name,str_map,value);
+         }
+       else if(re==2)
+         {
+            Variable_inte(var_name,para_str,value);
+         }
+        else
+         {
+           throw "变量未定义";
+         }
+    }
+  else
+    {
+
+    }
+}
+
+int Interpreter::var_Is_defined(string var_name,map<string,string> &Vartype_map) //判断变量是否定义,1在当前传递的map中定义，2在全局map定义，3未定义
+{
+  if(Vartype_map[var_name].empty())
+    {
+      if(!para_type[var_name].empty())
+        {
+          return 2;
+        }
+      else
+        {
+          return 3;
+        }
+    }
+  else
+    {
+      return 1;
+    }
+
+
+}
+void Interpreter::Variable_inte(string var_name,map<string,int> &int_map,string value) //整型变量赋值
+{
+
+  if(isnum(value))
+    {
+      throw "你给我的不是整数类型";
+    }
+ int_map[var_name]=str_to_int(value);
+}
+void Interpreter::Variable_inte(string var_name,map<string,string> &str_map,string value) //字符串变量赋值
+{
+
+  if(isStr(value))
+    {
+      throw "你给我的不是字符串类型";
+    }
+  str_map[var_name]=value;
+
+}
+
 string Interpreter::get_func_code(fstream &f) //获得定义函数的代码
 {
   string str;
@@ -81,17 +176,28 @@ void Interpreter::fun_inte(string fun_name,string code,string pre) //定义函�
   map<string,string>pre_str;//
   vector<string> pre_l=pre_list[fun_name];
   vector<string> pre_vec=split(pre,','); //将参数内容分割
+  if(pre_l.size()!=pre_vec.size())
+    {
+      throw "参数数量不一致";
+    }
   for(int i=0;i<pre_vec.size();i++)  //获取每个参数
     {
      if(isnum(pre_vec[i]))
        {
-         //pre_int[pre_l[i]]=stoi(pre_vec[i].c_str()); //字符串转整型报错了， 还未解决
+
+
+
+
+                //cout<<pre_vec[i]<<endl;
+               pre_int[pre_l[i]]=str_to_int(pre_vec[i]); //将整型参数放到定义函数参数列表当中
+
        }
-     else if(isStr(pre_vec[i]))
+     else if(isStr(pre_vec[i])) //给定义函数传递的是字符串
        {
          pre_str[pre_l[i]]=pre_vec[i];
+
        }
-     else
+     else //给定义函数传递的是变量
        {
          string type=para_type[pre_l[i]];
          if(type=="整型")
@@ -101,6 +207,10 @@ void Interpreter::fun_inte(string fun_name,string code,string pre) //定义函�
          else if(type=="字符串")
            {
              pre_str[pre_l[i]]=para_str[pre_l[i]];
+           }
+         else
+           {
+             throw "该变量未定义";
            }
 
        }
@@ -163,4 +273,53 @@ bool Interpreter::isStr(string str)//判断字符串
     }
 
 
+}
+int Interpreter::str_to_int(string str) //字符串转int函数
+{
+  if(str.empty())
+    {
+      throw "不能传入一个空的字符串";   //弹出异常
+    }
+  int Int=0;
+  for(int i=0;i<str.size();i++)
+    {
+
+      switch(str[i])
+        {
+        case '0':
+          Int=Int*10+0;
+          break;
+        case '1':
+          Int=Int*10+1;
+          break;
+        case '2':
+          Int=Int*10+2;
+          break;
+        case '3':
+          Int=Int*10+3;
+          break;
+        case '4':
+          Int=Int*10+4;
+          break;
+        case '5':
+          Int=Int*10+5;
+          break;
+        case '6':
+          Int=Int*10+6;
+          break;
+        case '7':
+          Int=Int*10+7;
+          break;
+        case '8':
+          Int=Int*10+8;
+          break;
+        case '9':
+          Int=Int*10+9;
+          break;
+
+        default:
+          throw "无法转换成整型，参数有错误";
+        }
+    }
+  return Int;
 }

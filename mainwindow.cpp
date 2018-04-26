@@ -21,7 +21,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-
+  try{
    integ->run("C:\\Users\\me\\Desktop\\plan.txt");
+  }
+  catch(const char* e)
+  {
+    cout<<e<<endl;
+  }
 
 }
