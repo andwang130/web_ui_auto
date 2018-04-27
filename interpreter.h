@@ -8,6 +8,8 @@
 #include<string>
 #include<fstream>
 using namespace std;
+const string Str_IN="字符串";
+const string Int_IN="整型";
 class Interpreter
 {
  private:

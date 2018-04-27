@@ -13,11 +13,13 @@ void Interpreter::run(string path)
   smatch st1;
   regex func_re("函数 (\\w+)\\((.*?)\\)"); //匹配脚本写的函数
   regex func_impt("(\\w+)\\((.*?)\\)"); //匹配函数调用
-
   regex variable_re("(整型|字符串)\\s(\\w+)");  //匹配变量定义
+  regex Variable_inte_re("(整型|字符串)\\s(\\w+)=(\\S+)"); //匹配变量定义同时赋值
+  regex Variable_ass("(\\w+)=(\\S+)"); //匹配变量赋值
+  regex print_re("打印\\((\\S+)\\)");//匹配打印
   while(getline(f,code)) //逐行读取
     {
-
+        cout<<code<<endl;
       if(regex_match(code,st1,func_re)) //匹配到了函数定义
         {  string func_code;
           vector<string> pre_str=split(st1[2],','); //将参分割
@@ -44,10 +46,51 @@ void Interpreter::run(string path)
         }
       else if(regex_match(code,st1,variable_re)) //匹配变量定义
         {
-
+          cout<<"变量定义"<<endl;
           Variable_matching(st1[1],st1[2],para_type);
+
+        }
+      else if(regex_match(code,st1,Variable_inte_re)) //匹配到v变量定义，并且赋值
+        {  cout<<"变量定义"<<endl;
+          string var_type=st1[1];
+          string var_name=st1[2];
+          string value=st1[3];
+          Variable_matching(var_type,var_name,para_type);
+          if (var_type==Str_IN)
+            {
+              Variable_inte(var_name,para_str,value);
+            }
+          else if(var_type==Int_IN)
+            {
+              Variable_inte(var_name,para_Int,value);
+            }
+
         }
 
+      else if(regex_match(code,st1,Variable_ass))  //匹配变量定义
+        {
+          string var_name=st1[1];
+          string value=st1[2];
+          string var_type=para_type[var_name];
+          if(var_type==Str_IN)
+            {
+               Variable_inte(var_name,para_str,value);
+            }
+          else if(var_type==Int_IN)
+            {
+               Variable_inte(var_name,para_Int,value);
+            }
+          else
+            {
+              throw "变量未定义";
+            }
+        }
+      else if(regex_match(code,st1,print_re)) //打印匹配
+        {
+          string val=st1[1];
+
+
+        }
     }
 }
 void Interpreter::Variable_matching(string var_type,string var_name,map<string,string> &Vartype_map)//变量匹配
@@ -128,22 +171,47 @@ int Interpreter::var_Is_defined(string var_name,map<string,string> &Vartype_map)
 }
 void Interpreter::Variable_inte(string var_name,map<string,int> &int_map,string value) //整型变量赋值
 {
-
-  if(isnum(value))
+ int Int_;
+  if(! isnum(value))
     {
+      Int_=int_map[value];
+      if(Int_)
+        {
+        int_map[var_name]=Int_;
+        }
+      else
+        {
       throw "你给我的不是整数类型";
+        }
     }
+  else
+    {
  int_map[var_name]=str_to_int(value);
+    }
 }
 void Interpreter::Variable_inte(string var_name,map<string,string> &str_map,string value) //字符串变量赋值
 {
-
-  if(isStr(value))
+  string value_;
+  if(!isStr(value))
     {
-      throw "你给我的不是字符串类型";
-    }
-  str_map[var_name]=value;
+      value_=str_map[value];
+      if(!value_.empty())
+        {
+     str_map[var_name]=value_;
 
+
+        }
+      else
+        {
+          throw "你给我的不是字符串类型";
+        }
+    }
+  else
+  {
+  value.erase(value.begin());
+  value.erase(value.end()-1);
+  str_map[var_name]=value;
+  }
 }
 
 string Interpreter::get_func_code(fstream &f) //获得定义函数的代码
@@ -174,7 +242,7 @@ void Interpreter::fun_inte(string fun_name,string code,string pre) //定义函�
 {
   map<string,int> pre_int;//int类型的参数
   map<string,string>pre_str;//
-  vector<string> pre_l=pre_list[fun_name];
+  vector<string> pre_l=pre_list[fun_name];  //内部函数参数列表
   vector<string> pre_vec=split(pre,','); //将参数内容分割
   if(pre_l.size()!=pre_vec.size())
     {
@@ -186,16 +254,16 @@ void Interpreter::fun_inte(string fun_name,string code,string pre) //定义函�
        {
 
 
-
-
                 //cout<<pre_vec[i]<<endl;
                pre_int[pre_l[i]]=str_to_int(pre_vec[i]); //将整型参数放到定义函数参数列表当中
 
        }
      else if(isStr(pre_vec[i])) //给定义函数传递的是字符串
        {
-         pre_str[pre_l[i]]=pre_vec[i];
-
+         string str=pre_vec[i];
+         str.erase(str.begin()); //删除首"
+         str.erase(str.end()-1);//删除尾部"
+         pre_str[pre_l[i]]=str;  //将字符串赋值给内部函数对于的参数
        }
      else //给定义函数传递的是变量
        {
@@ -250,10 +318,11 @@ vector<string> Interpreter::split(string str,char pi) //自己写的一个字符
 }
 bool Interpreter::isnum(string str) //判断一个字符串是否全是数字
 {
-  for(int i;i<str.size();i++)
+  for(int i=0;i<str.size();i++)
     {
       if(!isdigit(str[i]))
         {
+
           return false;
         }
     }
