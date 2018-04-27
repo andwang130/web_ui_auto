@@ -19,7 +19,7 @@ void Interpreter::run(string path)
   regex print_re("打印\\((\\S+)\\)");//匹配打印
   while(getline(f,code)) //逐行读取
     {
-        cout<<code<<endl;
+        //cout<<code<<endl;
       if(regex_match(code,st1,func_re)) //匹配到了函数定义
         {  string func_code;
           vector<string> pre_str=split(st1[2],','); //将参分割
@@ -88,10 +88,51 @@ void Interpreter::run(string path)
       else if(regex_match(code,st1,print_re)) //打印匹配
         {
           string val=st1[1];
+          if(isStr(val))
+            {
+              str_erase(val);
+              print(val);
+            }
+          else if(isnum(val))
+          {
+            print(val);
+
+          }
+          else if(!para_type[val].empty())
+            {
+              string var_type=para_type[val];
+              if(var_type==Str_IN)
+                {
+                  if(!para_str[val].empty())
+                    {
+                      print(para_str[val]);
+                    }
+                  else
+                    {
+                      throw "未初始化的变量";
+                    }
+                }
+              else if(var_type==Int_IN)
+                {
+                  if(!para_Int[val])
+                    {
+                      print(para_Int[val]);
+                    }
+                  else
+                    {
+                       throw "未初始化的变量";
+                    }
+
+            }
+          else
+            {
+             throw "未定义的变量";
+            }
 
 
         }
     }
+  }
 }
 void Interpreter::Variable_matching(string var_type,string var_name,map<string,string> &Vartype_map)//变量匹配
 {
@@ -188,6 +229,14 @@ void Interpreter::Variable_inte(string var_name,map<string,int> &int_map,string 
     {
  int_map[var_name]=str_to_int(value);
     }
+}
+void Interpreter::print(string var)
+{
+  cout<<var<<endl;
+}
+void Interpreter::print(int Int)
+{
+   cout<<Int<<endl;
 }
 void Interpreter::Variable_inte(string var_name,map<string,string> &str_map,string value) //字符串变量赋值
 {
@@ -391,4 +440,9 @@ int Interpreter::str_to_int(string str) //字符串转int函数
         }
     }
   return Int;
+}
+void Interpreter::str_erase(string &str)
+{
+  str.erase(str.begin()); //删除首"
+  str.erase(str.end()-1);//删除尾部"
 }

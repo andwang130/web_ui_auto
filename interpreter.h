@@ -29,7 +29,10 @@ class Interpreter
   void Variable_matching(string var_type,string var_name,map<string,string> &Vartype_map);//变量匹配
   void Variable_matching(string var_type,string var_name,map<string,string> &Vartype_map,map<string,int> &int_map,map<string,string> &str_map,string value);
   int var_Is_defined(string var_name,map<string,string> &Vartype_map);//判断变量是否定义,1在当前传递的map中定义，2在全局map定义，3未定义
- public:
+  void print(string var);//打印函数
+  void print(int Int);
+  void str_erase(string &str); //删除字符串前后的”
+public:
   void run(string path);
   void Variable_inte(string code);//
   string get_func_code(fstream &f);
