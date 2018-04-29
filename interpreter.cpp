@@ -12,11 +12,7 @@ void Interpreter::run(string path)
   string code;
   smatch st1;
   regex func_re("函数 (\\w+)\\((.*?)\\)"); //匹配脚本写的函数
-  regex func_impt("(\\w+)\\((.*?)\\)"); //匹配函数调用
-  regex variable_re("(整型|字符串)\\s(\\w+)");  //匹配变量定义
-  regex Variable_inte_re("(整型|字符串)\\s(\\w+)=(\\S+)"); //匹配变量定义同时赋值
-  regex Variable_ass("(\\w+)=(\\S+)"); //匹配变量赋值
-  regex print_re("打印\\((\\S+)\\)");//匹配打印
+  regex if_re("如果(.*?)");
   while(getline(f,code)) //逐行读取
     {
         //cout<<code<<endl;
@@ -27,112 +23,447 @@ void Interpreter::run(string path)
           func_code=get_func_code(f);   //转到函数代码的获取
           fun_list[st1[1]]=code+func_code; //获取到代码了，函数名为键，存到保存函数的map当中
         }
-      else if(regex_match(code,st1,func_impt))  //匹配到函数调用
-        {
-          string impt_code;
-          //st1[1];     //函数名
-          //st1[2]     //参数内容
-          impt_code=fun_list[st1[1]];
-          string pre=st1[2];
-
-          if(impt_code!="")
+      else if(regex_match(code,st1,if_re))  //匹配到IF语句
+        { string if_Expression=st1[1];
+          if(Expression(if_Expression,para_type,para_str,para_Int))
             {
-              fun_inte(st1[1],impt_code,pre);  //该函数存在，为定义函数转到定义函数调用
-            }
-          else
-            {
-             built_func(st1[1],pre);    //没有找到，函数为内部函数，转到内部函数调用
-            }
-        }
-      else if(regex_match(code,st1,variable_re)) //匹配变量定义
-        {
-          cout<<"变量定义"<<endl;
-          Variable_matching(st1[1],st1[2],para_type);
-
-        }
-      else if(regex_match(code,st1,Variable_inte_re)) //匹配到v变量定义，并且赋值
-        {  cout<<"变量定义"<<endl;
-          string var_type=st1[1];
-          string var_name=st1[2];
-          string value=st1[3];
-          Variable_matching(var_type,var_name,para_type);
-          if (var_type==Str_IN)
-            {
-              Variable_inte(var_name,para_str,value);
-            }
-          else if(var_type==Int_IN)
-            {
-              Variable_inte(var_name,para_Int,value);
-            }
-
-        }
-
-      else if(regex_match(code,st1,Variable_ass))  //匹配变量定义
-        {
-          string var_name=st1[1];
-          string value=st1[2];
-          string var_type=para_type[var_name];
-          if(var_type==Str_IN)
-            {
-               Variable_inte(var_name,para_str,value);
-            }
-          else if(var_type==Int_IN)
-            {
-               Variable_inte(var_name,para_Int,value);
-            }
-          else
-            {
-              throw "变量未定义";
-            }
-        }
-      else if(regex_match(code,st1,print_re)) //打印匹配
-        {
-          string val=st1[1];
-          if(isStr(val))
-            {
-              str_erase(val);
-              print(val);
-            }
-          else if(isnum(val))
-          {
-            print(val);
-
-          }
-          else if(!para_type[val].empty())
-            {
-              string var_type=para_type[val];
-              if(var_type==Str_IN)
-                {
-                  if(!para_str[val].empty())
-                    {
-                      print(para_str[val]);
-                    }
-                  else
-                    {
-                      throw "未初始化的变量";
-                    }
-                }
-              else if(var_type==Int_IN)
-                {
-                  if(!para_Int[val])
-                    {
-                      print(para_Int[val]);
-                    }
-                  else
-                    {
-                       throw "未初始化的变量";
-                    }
+              cout<<"true"<<endl;
 
             }
           else
             {
-             throw "未定义的变量";
+              cout<<"fales"<<endl;
             }
-
+//          string if_code=
+        }
+      else{
+          implement(code,para_type,para_str,para_Int); //匹配具体执行
 
         }
     }
-  }
+
+
+}
+string Interpreter::get_if_code(fstream f)
+{
+  string str;
+  string code;
+  smatch st1;
+  int x=0;
+  regex end("END");
+  while(true)
+    {
+      x++;
+      getline(f,code);
+      str=str+'\n'+code;
+      if(regex_match(code,st1,end))
+        {
+          break;
+        }
+    }
+  return str;
+}
+void get_if_code(string code)
+{
+
+}
+bool Interpreter::Expression(string code,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map) //表达式匹配
+{
+//  code.erase(code.begin());
+//  code.erase(code.end());
+  cout<<code<<endl;
+  regex greater("(\\S+)>(\\S+)");//大于
+  regex less("(\\S+)<(\\S+)");//小于
+  regex equal("(\\S)==(\\S+)"); //等于
+  regex greater_equ("(\\S+)>=(\\S+)");//大于或等于
+  regex less_equ("(\\S+)<=(\\S+)");//小于或等于
+  regex Variabl_IN("\\((\\w+)(>|<|==|>=|<=)(\\w+)\\)");
+  regex nums("\\d+"); //数字
+  smatch st;
+
+  regex_match(code,st,Variabl_IN);
+
+  string val1_=st[1];
+  string val3_=st[2];
+  string val2_=st[3];
+  cout<<val1_<<"****"<<val2_<<val3_<<endl;
+  if(isnum(val1_)&&isnum(val2_))
+    {
+
+      int val1=str_to_int(val1_);
+      int val2=str_to_int(val2_);
+     return juge_Expression<int,string,int>(val1,val3_,val2);
+    }
+  else if(isStr(val1_)&&isStr(val2_))
+    {
+      str_erase(val1_);
+       str_erase(val2_);
+       string val1=val1_;
+       string val2=val2_;
+     return  juge_Expression<string,string,string>(val1,val3_,val2);
+    }
+  else if(isStr(val1_)&&!isStr(val2_)&&!isnum(val2_))
+    {
+      str_erase(val1_);
+      string val1=val1_;
+      string str;
+      int Int;
+      Variable_get(val2_,str,Int,var_map_type,str_map,int_map);
+      if(!str.empty())
+        {
+          string val2=str;
+        return  juge_Expression<string,string,string>(val1,val3_,val2);
+        }
+      else
+        {
+          throw "类型不一致";
+        }
+
+
+
+    }
+  else if(isnum(val1_)&&!isStr(val2_)&&isnum(val2_))
+    {
+
+      int val1=str_to_int(val1_);
+      string str;
+      int Int;
+      Variable_get(val2_,str,Int,var_map_type,str_map,int_map);
+      if(Int)
+        {
+          int val2=Int;
+         return juge_Expression<int,string,int>(val1,val3_,val2);
+        }
+      else
+        {
+          throw "类型不一致";
+        }
+
+
+    }
+  else if(isStr(val2_)&&!isStr(val1_)&&!isnum(val1_))
+    {
+      str_erase(val2_);
+      string val1=val2_;
+      string str;
+      int Int;
+      Variable_get(val1_,str,Int,var_map_type,str_map,int_map);
+      if(!str.empty())
+        {
+          string val2=str;
+         return juge_Expression<string,string,string>(val1,val3_,val2);
+        }
+      else
+        {
+          throw "类型不一致";
+        }
+
+
+
+    }
+  else if(isnum(val2_)&&!isStr(val1_)&&!isnum(val1_))
+    {
+
+      int val2=str_to_int(val2_);
+      string str;
+      int Int;
+      Variable_get(val1_,str,Int,var_map_type,str_map,int_map);
+      if(Int)
+        {
+          int val1=Int;
+         return juge_Expression<int,string,int>(val1,val3_,val2);
+        }
+      else
+        {
+          throw "类型不一致";
+        }
+
+
+    }
+  else
+    {
+      string str1;
+      int Int1;
+      string str2;
+      int Int2;
+      Variable_get(val1_,str1,Int1,var_map_type,str_map,int_map);
+      Variable_get(val2_,str2,Int2,var_map_type,str_map,int_map);
+      if(!str1.empty()&&!str2.empty())
+        {
+          string val1=str1;
+          string val2=str2;
+          return juge_Expression<string,string,string>(val1,val3_,val2);
+        }
+      else if(Int1&&Int2)
+        {
+           int val1=Int1;
+           int val2=Int2;
+         return  juge_Expression<int,string,int>(val1,val3_,val2);
+
+        }
+    }
+  if(regex_match(code,st,nums))
+    {
+     if(st[1]=="0")
+       {
+         return false;
+       }
+     else
+       {
+         return true;
+       }
+    }
+  else
+    {
+      throw "表达试错误";
+    }
+
+
+
+
+}
+
+template<typename v1,typename sy,typename v2>
+bool Interpreter::juge_Expression(v1 val1,sy symbol,v2 val2)
+{
+
+      if(symbol==">")
+        {
+           return val1>val2;
+        }
+
+      else if(symbol=="<")
+        {
+          return val1<val2;
+        }
+      else if(symbol=="==")
+        {
+
+
+            return val1==val2;
+
+
+        }
+
+      else if(symbol==">=")
+        {
+          return val1>=val2;
+
+
+
+
+        }
+      else if(symbol=="<=")
+        {
+          return val1==val2;
+        }
+      else
+        {
+          throw "表达式错误";
+        }
+
+
+}
+void Interpreter::Variable_get(string var,string &str,int &Int,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map)
+{
+
+  if(!var_map_type[var].empty())
+    {
+     string var_type=var_map_type[var];
+     if(var_type==Str_IN){
+         Int=int_map[var];
+       }
+     if(var_type==Int_IN)
+       {
+         str=str_map[var];
+
+       }
+    }
+  else if(!para_type[var].empty())
+    {
+      string var_type=para_type[var];
+      if(var_type==Str_IN){
+          Int=para_Int[var];
+        }
+      if(var_type==Int_IN)
+        {
+          str=para_str[var];
+        }
+
+    }
+  else
+    {
+      throw "变量未定义";
+    }
+
+}
+void Interpreter::implement(string code,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map) //其他的函数调用，变量定义匹配
+{
+  smatch st1;
+  regex func_impt("(\\w+)\\((.*?)\\)"); //匹配函数调用
+  regex variable_re("(整型|字符串)\\s(\\w+)");  //匹配变量定义
+  regex Variable_inte_re("(整型|字符串)\\s(\\w+)=(\\S+)"); //匹配变量定义同时赋值
+  regex Variable_ass("(\\w+)=(\\S+)"); //匹配变量赋值
+  regex print_re("打印\\((\\S+)\\)");//匹配打印
+   if(regex_match(code,st1,func_impt))  //匹配到函数调用
+    {
+      string impt_code;
+      //st1[1];     //函数名
+      //st1[2]     //参数内容
+      impt_code=fun_list[st1[1]];
+      string pre=st1[2];
+
+      if(impt_code!="")
+        {
+          fun_inte(st1[1],impt_code,pre);  //该函数存在，为定义函数转到定义函数调用
+        }
+      else
+        {
+         built_func(st1[1],pre);    //没有找到，函数为内部函数，转到内部函数调用
+        }
+    }
+  else if(regex_match(code,st1,variable_re)) //匹配变量定义
+    {
+      Variable_matching(st1[1],st1[2],var_map_type);
+
+    }
+  else if(regex_match(code,st1,Variable_inte_re)) //匹配到v变量定义，并且赋值
+    {
+      string var_type=st1[1];
+      string var_name=st1[2];
+      string value=st1[3];
+      Variable_matching(var_type,var_name,var_map_type);
+      if (var_type==Str_IN)
+        {
+          Variable_inte(var_name,str_map,value);
+        }
+      else if(var_type==Int_IN)
+        {
+          Variable_inte(var_name,int_map,value);
+        }
+
+    }
+
+  else if(regex_match(code,st1,Variable_ass))  //匹配赋值
+    {
+
+      string var_name=st1[1];
+      string value=st1[2];
+      string var_type=var_map_type[var_name];
+
+      if(var_type==Str_IN)
+        {
+           Variable_inte(var_name,str_map,value);
+           cout<<"f赋值"<<endl;
+        }
+      else if(var_type==Int_IN)
+        {
+           Variable_inte(var_name,int_map,value);
+        }
+      else
+        {
+          throw "变量未定义";
+        }
+    }
+   else if(regex_match(code,st1,print_re)) //打印匹配
+     {
+
+
+
+       string val=st1[1];
+
+       if(isStr(val))
+         {
+
+           str_erase(val);
+           print(val);
+         }
+       else if(isnum(val))
+       {
+
+         print(val);
+
+       }
+       else if(!var_map_type[val].empty())
+         {
+
+           string var_type=var_map_type[val];
+
+           if(var_type==Str_IN)
+             {
+               if(!str_map[val].empty())
+                 {
+                   print(str_map[val]);
+                 }
+               else
+                 {
+
+
+                   throw "未初始化的变量";
+                 }
+             }
+           else if(var_type==Int_IN)
+             {
+               if(int_map[val])
+                 {
+
+                   print(int_map[val]);
+                 }
+               else
+                 {
+
+
+                    throw "未初始化的变量";
+                 }
+
+               }
+
+
+     }
+       else if(!para_type[val].empty()) //未匹配到传递的变量map，使用全局的
+         {
+           string var_type=para_type[val];
+
+           if(var_type==Str_IN)
+             {
+               if(!para_str[val].empty())
+                 {
+                   print(para_str[val]);
+                 }
+               else
+                 {
+
+
+                   throw "未初始化的变量";
+                 }
+             }
+           else if(var_type==Int_IN)
+             {
+               if(para_Int[val])
+                 {
+
+                   print(para_Int[val]);
+                 }
+               else
+                 {
+
+
+                    throw "未初始化的变量";
+                 }
+
+               }
+
+
+         }
+
+       else
+         {
+
+
+          throw "未定义的变量";
+         }
+     }
+
 }
 void Interpreter::Variable_matching(string var_type,string var_name,map<string,string> &Vartype_map)//变量匹配
 {
@@ -213,12 +544,19 @@ int Interpreter::var_Is_defined(string var_name,map<string,string> &Vartype_map)
 void Interpreter::Variable_inte(string var_name,map<string,int> &int_map,string value) //整型变量赋值
 {
  int Int_;
+ int O_Int;
   if(! isnum(value))
     {
       Int_=int_map[value];
+      O_Int=para_Int[value];
       if(Int_)
         {
+
         int_map[var_name]=Int_;
+        }
+      else if(O_Int)
+        {
+          int_map[var_name]=O_Int;
         }
       else
         {
@@ -227,6 +565,9 @@ void Interpreter::Variable_inte(string var_name,map<string,int> &int_map,string 
     }
   else
     {
+
+
+
  int_map[var_name]=str_to_int(value);
     }
 }
@@ -244,11 +585,16 @@ void Interpreter::Variable_inte(string var_name,map<string,string> &str_map,stri
   if(!isStr(value))
     {
       value_=str_map[value];
+      string O_str=para_str[value];
       if(!value_.empty())
         {
      str_map[var_name]=value_;
 
 
+        }
+      else if(! O_str.empty())
+        {
+          str_map[var_name]=O_str;
         }
       else
         {
@@ -290,6 +636,7 @@ void Interpreter::Variable_inte(string code) //参数定义
 void Interpreter::fun_inte(string fun_name,string code,string pre) //定义函数调用
 {
   map<string,int> pre_int;//int类型的参数
+  map<string,string>pre_type;
   map<string,string>pre_str;//
   vector<string> pre_l=pre_list[fun_name];  //内部函数参数列表
   vector<string> pre_vec=split(pre,','); //将参数内容分割
@@ -304,11 +651,13 @@ void Interpreter::fun_inte(string fun_name,string code,string pre) //定义函�
 
 
                 //cout<<pre_vec[i]<<endl;
+                pre_type[pre_l[i]]=Int_IN;
                pre_int[pre_l[i]]=str_to_int(pre_vec[i]); //将整型参数放到定义函数参数列表当中
 
        }
      else if(isStr(pre_vec[i])) //给定义函数传递的是字符串
        {
+         pre_type[pre_l[i]]=Str_IN;
          string str=pre_vec[i];
          str.erase(str.begin()); //删除首"
          str.erase(str.end()-1);//删除尾部"
@@ -331,6 +680,12 @@ void Interpreter::fun_inte(string fun_name,string code,string pre) //定义函�
            }
 
        }
+    }
+  code=fun_list[fun_name];
+  vector<string> fun_code_list=split(code,'\n');
+  for(int i=0;i<fun_code_list.size();i++)
+    {
+      implement(fun_code_list[i],pre_type,pre_str,pre_int);
     }
 
 }

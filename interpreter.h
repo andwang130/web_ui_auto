@@ -32,6 +32,14 @@ class Interpreter
   void print(string var);//打印函数
   void print(int Int);
   void str_erase(string &str); //删除字符串前后的”
+  void implement(string code,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map);//具体执行匹配
+  string get_if_code(fstream f);//获得IF语句代码
+  string get_if_code(string code);
+  void Variable_get(string &str);//变量获取
+  bool Expression(string code,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map);//表达式匹配
+  void Variable_get(string var,string &str,int &Int,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map);//获得变量数据
+  template<typename val1,typename symbol,typename val2>
+  bool juge_Expression(val1,symbol,val2);//表示试对比
 public:
   void run(string path);
   void Variable_inte(string code);//

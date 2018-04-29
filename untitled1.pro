@@ -53,4 +53,4 @@ INCLUDEPATH += D:/opencv/build/include \
 
 
 
- LIBS += D:/opencv/build/x64/vc14/lib/opencv_world341.lib
+ LIBS += D:/opencv/build/x64/vc14/lib/opencv_world341d.lib
