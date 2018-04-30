@@ -1,6 +1,6 @@
 #ifndef CONTROL_H
 #define CONTROL_H
-
+#pragma once
 #endif // CONTROL_H
 #include<QString>
 #include<Windows.h>
@@ -10,7 +10,6 @@
 using namespace std;
 class CControl
 {
-
 public:
 void mouse_move(int x,int y);
 void mouse_left_click(int x,int y);//左键点击，带参数

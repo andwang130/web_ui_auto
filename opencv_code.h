@@ -1,6 +1,7 @@
 #ifndef OPENCV_CODE_H
 #define OPENCV_CODE_H
 #endif // OPENCV_CODE_H
+#pragma once
 #include<iostream>
 #include<string>
 #include<Windows.h>

@@ -1,6 +1,6 @@
 #ifndef SPECIFIC_H
 #define SPECIFIC_H
-
+#pragma once
 #endif // SPECIFIC_H
 #include<control.h>
 #include<opencv_code.h>

@@ -7,12 +7,14 @@
 #include<map>
 #include<string>
 #include<fstream>
+#include<specific.h>
 using namespace std;
 const string Str_IN="字符串";
 const string Int_IN="整型";
 class Interpreter
 {
  private:
+  Integration *oper; //操作类
   map<string,string> para_type; //变量类型
   map<string,int> para_Int;         //int型变量
   map<string,string> para_str;     //字符型变量
@@ -45,11 +47,20 @@ class Interpreter
   string skip_for(fstream &f);
   void if_init(string code,string if_Expression,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map);
   void for_init(string code,string if_Expression,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map);
-
+  int Variable_INT(string var,map<string,int>&int_map);//获取整型变量的值
+  string Variable_Str(string var,map<string,string>&str_map);//获取字符串变量的值
 public:
+  Interpreter()
+  {
+     oper=new Integration();
+  }
+  ~Interpreter()
+  {
+    delete oper;
+  }
   void run(string path);
   void Variable_inte(string code);//
   string get_func_code(fstream &f);
   void fun_inte(string fun_name,string code,string pre);//
-  void built_func(string func_name,string pre);
+  void built_func(string func_name,string pre,map<string,string>type_map,map<string,string>str_map,map<string,int>int_map);
 };

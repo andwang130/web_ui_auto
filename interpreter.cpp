@@ -11,9 +11,9 @@ void Interpreter::run(string path)
     }
   string code;
   smatch st1;
-  regex func_re("函数 (\\w+)\\((.*?)\\)"); //匹配脚本写的函数
-  regex if_re("如果(.*?)");
-  regex for_re("循环(.*?)");//循环匹配
+  regex func_re("\\s*函数 (\\w+)\\((.*?)\\)"); //匹配脚本写的函数
+  regex if_re("\\s*如果(.*?)");
+  regex for_re("\\s*循环(.*?)");//循环匹配
   while(getline(f,code)) //逐行读取
     {
         //cout<<code<<endl;
@@ -67,8 +67,8 @@ void Interpreter::for_init(string code,string if_Expression,map<string,string>&v
     {
   if(Expression(if_Expression,para_type,para_str,para_Int)) //表达式未TRUE，代码继续执行
     {
-      regex if_re("如果(.*?)");
-      regex for_re("循环(.*?)");
+      regex if_re("\\s*如果(.*?)");
+      regex for_re("\\s*循环(.*?)");
       for(int i=0;i<vect_if_code.size();i++)
         {
           if(regex_match(vect_if_code[i],st1,if_re))
@@ -80,6 +80,7 @@ void Interpreter::for_init(string code,string if_Expression,map<string,string>&v
             }
           else if(regex_match(vect_if_code[i],st1,for_re))
             {
+              i++;
               string for_code=get_for_code(vect_if_code,i);
               for_init(for_code,st1[1],var_map_type,str_map,int_map);
             }
@@ -94,14 +95,14 @@ void Interpreter::for_init(string code,string if_Expression,map<string,string>&v
 }
 void Interpreter::if_init(string code,string if_Expression,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map)
 {
-  cout<<"进入IF"<<"********"<<endl;
+
   smatch st1;
   vector<string> vect_if_code=split(code,'\n');
   if(Expression(if_Expression,para_type,para_str,para_Int)) //表达式未TRUE，代码继续执行
     {
 
-      regex if_re("如果(.*?)");
-      regex for_re("循环(.*?)");
+      regex if_re("\\s*如果(.*?)");
+      regex for_re("\\s*循环(.*?)");
       for(int i=0;i<vect_if_code.size();i++)
         {
           if(regex_match(vect_if_code[i],st1,if_re))
@@ -117,6 +118,7 @@ void Interpreter::if_init(string code,string if_Expression,map<string,string>&va
             }
           else if(regex_match(vect_if_code[i],st1,for_re))
             {
+              i++;
                string for_code=get_for_code(vect_if_code,i);
                for_init(for_code,st1[1],var_map_type,str_map,int_map);
             }
@@ -204,9 +206,9 @@ string Interpreter::get_for_code(vector<string> vect_if_code,int &num)
   string code;
   smatch st1;
   int x=0;
-  regex end("\\}");
-  regex if_re("如果(.*?)");
-  regex for_re("循环(.*?)");
+  regex end("\\s*\\}");
+  regex if_re("\\s*如果(.*?)");
+  regex for_re("\\s*循环(.*?)");
   for(;num<vect_if_code.size();num++){
       str=str+'\n'+vect_if_code[num];
       if(regex_match(vect_if_code[num],st1,if_re))
@@ -234,9 +236,9 @@ string Interpreter::get_if_code(vector<string> vect_if_code,int &num)
   string str;
   smatch st1;
   int x=0;
-  regex end("\\}");
-  regex if_re("如果(.*?)");
-  regex for_re("循环(.*?)");
+  regex end("\\s*\\}");
+  regex if_re("\\s*如果(.*?)");
+  regex for_re("\\s*循环(.*?)");
   for(;num<vect_if_code.size();num++){
       str=str+'\n'+vect_if_code[num];
       if(regex_match(vect_if_code[num],st1,if_re))
@@ -453,10 +455,60 @@ bool Interpreter::juge_Expression(v1 val1,sy symbol,v2 val2)
 
 
 }
+int Interpreter::Variable_INT(string var,map<string,int>&int_map)
+{
+  if(isnum(var))
+    {
+      return str_to_int(var);
+    }
+  else
+    {
+      if(int_map.find(var)==int_map.end())
+        {
+        if(para_Int.find(var)==para_Int.end())
+          {
+             throw "该变量未定义";
+          }
+        else
+          {
+            return para_Int[var];
+          }
+        }
+      else
+        {
+          return int_map[var];
+        }
+    }
+
+}
+string Interpreter::Variable_Str(string var,map<string,string>&str_map)//获取字符串变量的值
+{
+  if(isStr(var))
+    {
+      str_erase(var);
+      return var;
+    }
+ if(str_map.find(var)==str_map.end())
+   {
+     if(para_str.find(var)==para_str.end())
+       {
+         throw "该变量未定义";
+
+       }
+     else
+       {
+         return para_str[var];
+       }
+   }
+ else
+   {
+     return str_map[var];
+   }
+}
 void Interpreter::Variable_get(string var,string &str,int &Int,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map)
 {
 
-  if(!var_map_type[var].empty())
+  if(var_map_type.find(var)!=var_map_type.end())
     {
      string var_type=var_map_type[var];
      if(var_type==Str_IN){
@@ -468,7 +520,7 @@ void Interpreter::Variable_get(string var,string &str,int &Int,map<string,string
 
        }
     }
-  else if(!para_type[var].empty())
+  else if(para_type.find(var)!=para_type.end())
     {
       string var_type=para_type[var];
       if(var_type==Str_IN){
@@ -489,26 +541,30 @@ void Interpreter::Variable_get(string var,string &str,int &Int,map<string,string
 void Interpreter::implement(string code,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map) //其他的函数调用，变量定义匹配
 {
   smatch st1;
-  regex func_impt("(\\w+)\\((.*?)\\)"); //匹配函数调用
-  regex variable_re("(整型|字符串)\\s(\\w+)");  //匹配变量定义
-  regex Variable_inte_re("(整型|字符串)\\s(\\w+)=(\\S+)"); //匹配变量定义同时赋值
-  regex Variable_ass("(\\w+)=(\\S+)"); //匹配变量赋值
-  regex print_re("打印\\((\\S+)\\)");//匹配打印
-   if(regex_match(code,st1,func_impt))  //匹配到函数调用
+  regex func_impt("\\s*(\\S+)\\((.*?)\\)"); //匹配函数调用
+  regex variable_re("\\s*(整型|字符串)\\s(\\w+)");  //匹配变量定义
+  regex Variable_inte_re("\\s*(整型|字符串)\\s(\\w+)=(\\S+)"); //匹配变量定义同时赋值
+  regex Variable_ass("\\s*(\\w+)=(\\S+)"); //匹配变量赋值
+  regex print_re("\\s*打印\\((\\S+)\\)");//匹配打印
+   if(regex_match(code,st1,func_impt)&&st1[1]!="打印")  //匹配到函数调用
     {
       string impt_code;
+
       //st1[1];     //函数名
       //st1[2]     //参数内容
+      string fun_name=st1[1];
       impt_code=fun_list[st1[1]];
       string pre=st1[2];
 
       if(impt_code!="")
         {
+          cout<<"函数存在"<<st1[1]<<endl;
           fun_inte(st1[1],impt_code,pre);  //该函数存在，为定义函数转到定义函数调用
         }
       else
         {
-         built_func(st1[1],pre);    //没有找到，函数为内部函数，转到内部函数调用
+
+         built_func(st1[1],pre,var_map_type,str_map,int_map);    //没有找到，函数为内部函数，转到内部函数调用
         }
     }
   else if(regex_match(code,st1,variable_re)) //匹配变量定义
@@ -573,14 +629,14 @@ void Interpreter::implement(string code,map<string,string>&var_map_type,map<stri
          print(val);
 
        }
-       else if(!var_map_type[val].empty())
+       else if(var_map_type.find(val)!=var_map_type.end())
          {
 
            string var_type=var_map_type[val];
 
            if(var_type==Str_IN)
              {
-               if(!str_map[val].empty())
+               if(str_map.find(val)!=str_map.end())
                  {
                    print(str_map[val]);
                  }
@@ -593,7 +649,7 @@ void Interpreter::implement(string code,map<string,string>&var_map_type,map<stri
              }
            else if(var_type==Int_IN)
              {
-               if(int_map[val])
+               if(int_map.find(val)!=int_map.end())
                  {
 
                    print(int_map[val]);
@@ -609,13 +665,13 @@ void Interpreter::implement(string code,map<string,string>&var_map_type,map<stri
 
 
      }
-       else if(!para_type[val].empty()) //未匹配到传递的变量map，使用全局的
+       else if(para_type.find(val)!=para_type.end()) //未匹配到传递的变量map，使用全局的
          {
            string var_type=para_type[val];
 
            if(var_type==Str_IN)
              {
-               if(!para_str[val].empty())
+               if(para_str.find(val)!=para_str.end())
                  {
                    print(para_str[val]);
                  }
@@ -628,7 +684,7 @@ void Interpreter::implement(string code,map<string,string>&var_map_type,map<stri
              }
            else if(var_type==Int_IN)
              {
-               if(para_Int[val])
+               if(para_Int.find(val)!=para_Int.end())
                  {
 
                    print(para_Int[val]);
@@ -738,12 +794,12 @@ void Interpreter::Variable_inte(string var_name,map<string,int> &int_map,string 
     {
       Int_=int_map[value];
       O_Int=para_Int[value];
-      if(Int_)
+      if(int_map.find(value)!=int_map.end())
         {
 
         int_map[var_name]=Int_;
         }
-      else if(O_Int)
+      else if(para_Int.find(value)!=para_Int.end())
         {
           int_map[var_name]=O_Int;
         }
@@ -775,13 +831,13 @@ void Interpreter::Variable_inte(string var_name,map<string,string> &str_map,stri
     {
       value_=str_map[value];
       string O_str=para_str[value];
-      if(!value_.empty())
+      if(str_map.find(value)!=str_map.end())
         {
      str_map[var_name]=value_;
 
 
         }
-      else if(! O_str.empty())
+      else if(para_str.find(value)!=para_str.end())
         {
           str_map[var_name]=O_str;
         }
@@ -804,9 +860,9 @@ string Interpreter::get_func_code(fstream &f) //获得定义函数的代码
   string code;
   smatch st1;
   int x=0;
-  regex end("\\}");
-  regex if_re("如果(.*?)");
-  regex for_re("循环(.*?)");
+  regex end("\\s*\\}");
+  regex if_re("\\s*如果(.*?)");
+  regex for_re("\\s*循环(.*?)");
   while(true)
     {
 
@@ -844,6 +900,7 @@ void Interpreter::fun_inte(string fun_name,string code,string pre) //定义函�
   map<string,string>pre_str;//
   vector<string> pre_l=pre_list[fun_name];  //内部函数参数列表
   vector<string> pre_vec=split(pre,','); //将参数内容分割
+
   if(pre_l.size()!=pre_vec.size())
     {
       throw "参数数量不一致";
@@ -887,9 +944,34 @@ void Interpreter::fun_inte(string fun_name,string code,string pre) //定义函�
     }
   code=fun_list[fun_name];
   vector<string> fun_code_list=split(code,'\n');
+  regex if_re("如果(.*?)");
+  regex for_re("循环(.*?)");
+  smatch st1;
   for(int i=0;i<fun_code_list.size();i++)
     {
+      if(regex_match(fun_code_list[i],st1,if_re))
+        {
+
+          i++;
+          string if_code=get_if_code(fun_code_list,i);
+
+          if_init(if_code,st1[1],pre_type,pre_str,pre_int);
+
+
+
+        }
+      else if(regex_match(fun_code_list[i],st1,for_re))
+        {
+           i++;
+           string for_code=get_for_code(fun_code_list,i);
+           for_init(for_code,st1[1],pre_type,pre_str,pre_int);
+        }
+      else
+        {
       implement(fun_code_list[i],pre_type,pre_str,pre_int);
+        }
+
+
     }
 
 }
@@ -897,8 +979,40 @@ void Interpreter::get_pre(string pre_nmae,int &Int,string &str)
 {
 
 }
-void Interpreter::built_func(string func_name,string pre) //内部函数调用
+void Interpreter::built_func(string func_name,string pre,map<string,string>type_map,map<string,string>str_map,map<string,int>int_map) //内部函数调用
 {
+  vector<string>ver_pre=split(pre,',');
+  int pre_size=ver_pre.size();
+  cout<<pre_size<<endl;
+  cout<<"执行内部函数"<<endl;
+  if(func_name=="左键单击")
+    {
+      if(pre_size!=2)
+        {
+          throw "需要参数是两个,请检查参数";
+        }
+      else
+        {
+          int x=Variable_INT(ver_pre[0],int_map);
+          int y=Variable_INT(ver_pre[1],int_map);
+          oper->L_Click(x,y);
+        }
+
+    }
+  else if(func_name=="左键双击")
+    {
+      if(pre_size!=2)
+        {
+          throw "需要参数是两个,请检查参数";
+        }
+      else
+        {
+          int x=Variable_INT(ver_pre[0],int_map);
+          int y=Variable_INT(ver_pre[1],int_map);
+          oper->L_Click_d(x,y);
+        }
+    }
+
 
 }
 vector<string> Interpreter::split(string str,char pi) //字符串分割函数
