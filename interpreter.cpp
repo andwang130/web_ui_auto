@@ -13,6 +13,7 @@ void Interpreter::run(string path)
   smatch st1;
   regex func_re("函数 (\\w+)\\((.*?)\\)"); //匹配脚本写的函数
   regex if_re("如果(.*?)");
+  regex for_re("循环(.*?)");//循环匹配
   while(getline(f,code)) //逐行读取
     {
         //cout<<code<<endl;
@@ -24,17 +25,24 @@ void Interpreter::run(string path)
           fun_list[st1[1]]=code+func_code; //获取到代码了，函数名为键，存到保存函数的map当中
         }
       else if(regex_match(code,st1,if_re))  //匹配到IF语句
-        { string if_Expression=st1[1];
-          if(Expression(if_Expression,para_type,para_str,para_Int))
-            {
-              cout<<"true"<<endl;
+        {
+          string if_Expression=st1[1];
 
-            }
-          else
-            {
-              cout<<"fales"<<endl;
-            }
-//          string if_code=
+          string if_code=skip_if(f);
+         if_init(if_code,if_Expression,para_type,para_str,para_Int);
+
+
+
+        }
+     else if(regex_match(code,st1,for_re))
+        {
+           cout<<"匹配到for"<<"********"<<endl;
+          string if_Expression=st1[1];
+          string for_code=skip_for(f);
+          for_init(for_code,if_Expression,para_type,para_str,para_Int);
+
+
+
         }
       else{
           implement(code,para_type,para_str,para_Int); //匹配具体执行
@@ -44,166 +52,347 @@ void Interpreter::run(string path)
 
 
 }
-string Interpreter::get_if_code(fstream f)
+void Interpreter::for_init(string code,string if_Expression,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map)
+{
+  smatch st1;
+  vector<string> vect_if_code=split(code,'\n');
+  regex exp_num("\\((\\d+)\\)");
+  int for_num=1;
+  if(regex_match(if_Expression,st1,exp_num))
+    {
+      cout<<st1[1]<<endl;
+      for_num=str_to_int(st1[1]);
+    }
+  for(;for_num>0;for_num--)
+    {
+  if(Expression(if_Expression,para_type,para_str,para_Int)) //表达式未TRUE，代码继续执行
+    {
+      regex if_re("如果(.*?)");
+      regex for_re("循环(.*?)");
+      for(int i=0;i<vect_if_code.size();i++)
+        {
+          if(regex_match(vect_if_code[i],st1,if_re))
+            {
+              i++;
+              string if_code=get_if_code(vect_if_code,i);
+              if_init(if_code,st1[1],var_map_type,str_map,int_map);
+
+            }
+          else if(regex_match(vect_if_code[i],st1,for_re))
+            {
+              string for_code=get_for_code(vect_if_code,i);
+              for_init(for_code,st1[1],var_map_type,str_map,int_map);
+            }
+          else
+            {
+          implement(vect_if_code[i],var_map_type,str_map,int_map);
+            }
+        }
+
+    }
+    }
+}
+void Interpreter::if_init(string code,string if_Expression,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map)
+{
+  cout<<"进入IF"<<"********"<<endl;
+  smatch st1;
+  vector<string> vect_if_code=split(code,'\n');
+  if(Expression(if_Expression,para_type,para_str,para_Int)) //表达式未TRUE，代码继续执行
+    {
+
+      regex if_re("如果(.*?)");
+      regex for_re("循环(.*?)");
+      for(int i=0;i<vect_if_code.size();i++)
+        {
+          if(regex_match(vect_if_code[i],st1,if_re))
+            {
+
+              i++;
+              string if_code=get_if_code(vect_if_code,i);
+
+              if_init(if_code,st1[1],var_map_type,str_map,int_map);
+
+
+
+            }
+          else if(regex_match(vect_if_code[i],st1,for_re))
+            {
+               string for_code=get_for_code(vect_if_code,i);
+               for_init(for_code,st1[1],var_map_type,str_map,int_map);
+            }
+          else
+            {
+          implement(vect_if_code[i],var_map_type,str_map,int_map);
+            }
+        }
+
+    }
+
+}
+string Interpreter::skip_for(fstream &f)
 {
   string str;
   string code;
   smatch st1;
   int x=0;
-  regex end("END");
+  regex end("\\}");
+  regex if_re("如果(.*?)");
+  regex for_re("循环(.*?)");
   while(true)
     {
-      x++;
+
       getline(f,code);
       str=str+'\n'+code;
-      if(regex_match(code,st1,end))
+      if(regex_match(code,st1,if_re))
+        {
+          x++;
+        }
+      else if(regex_match(code,st1,for_re))
+        {
+          x++;
+        }
+      else if(regex_match(code,st1,end)&&x<=0)
         {
           break;
         }
+       else if(regex_match(code,st1,end))
+        {
+         x--;
+        }
+
     }
   return str;
 }
-void get_if_code(string code)
+string Interpreter::skip_if(fstream &f)
 {
+  string str;
+  string code;
+  smatch st1;
+  int x=0;
+  regex end("\\}");
+  regex if_re("如果(.*?)");
+  regex for_re("循环(.*?)");
+  while(true)
+    {
 
+      getline(f,code);
+      str=str+'\n'+code;
+      if(regex_match(code,st1,if_re))
+        {
+          x++;
+        }
+      else if(regex_match(code,st1,for_re))
+        {
+          x++;
+        }
+      else if(regex_match(code,st1,end)&&x<=0)
+        {
+          break;
+        }
+       else if(regex_match(code,st1,end))
+        {
+         x--;
+        }
+
+    }
+  return str;
+
+}
+string Interpreter::get_for_code(vector<string> vect_if_code,int &num)
+{
+  string str;
+  string code;
+  smatch st1;
+  int x=0;
+  regex end("\\}");
+  regex if_re("如果(.*?)");
+  regex for_re("循环(.*?)");
+  for(;num<vect_if_code.size();num++){
+      str=str+'\n'+vect_if_code[num];
+      if(regex_match(vect_if_code[num],st1,if_re))
+        {
+          x++;
+        }
+      else if(regex_match(vect_if_code[num],st1,for_re))
+        {
+          x++;
+        }
+      else if(regex_match(vect_if_code[num],st1,end)&&x<=0)
+        {
+          break;
+        }
+       else if(regex_match(vect_if_code[num],st1,end))
+        {
+         x--;
+        }
+
+    }
+  return str;
+}
+string Interpreter::get_if_code(vector<string> vect_if_code,int &num)
+{
+  string str;
+  smatch st1;
+  int x=0;
+  regex end("\\}");
+  regex if_re("如果(.*?)");
+  regex for_re("循环(.*?)");
+  for(;num<vect_if_code.size();num++){
+      str=str+'\n'+vect_if_code[num];
+      if(regex_match(vect_if_code[num],st1,if_re))
+        {
+          x++;
+        }
+      else if(regex_match(vect_if_code[num],st1,for_re))
+        {
+          x++;
+        }
+      else if(regex_match(vect_if_code[num],st1,end)&&x<=0)
+        {
+
+          break;
+        }
+       else if(regex_match(vect_if_code[num],st1,end))
+        {
+         x--;
+        }
+
+    }
+  return str;
 }
 bool Interpreter::Expression(string code,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map) //表达式匹配
 {
-//  code.erase(code.begin());
-//  code.erase(code.end());
-  cout<<code<<endl;
-  regex greater("(\\S+)>(\\S+)");//大于
-  regex less("(\\S+)<(\\S+)");//小于
-  regex equal("(\\S)==(\\S+)"); //等于
-  regex greater_equ("(\\S+)>=(\\S+)");//大于或等于
-  regex less_equ("(\\S+)<=(\\S+)");//小于或等于
+
+
   regex Variabl_IN("\\((\\w+)(>|<|==|>=|<=)(\\w+)\\)");
-  regex nums("\\d+"); //数字
+  regex nums("\\((\\d+)\\)"); //数字
   smatch st;
 
-  regex_match(code,st,Variabl_IN);
-
-  string val1_=st[1];
-  string val3_=st[2];
-  string val2_=st[3];
-  cout<<val1_<<"****"<<val2_<<val3_<<endl;
-  if(isnum(val1_)&&isnum(val2_))
+  if(regex_match(code,st,Variabl_IN))
     {
 
-      int val1=str_to_int(val1_);
-      int val2=str_to_int(val2_);
-     return juge_Expression<int,string,int>(val1,val3_,val2);
+          string val1_=st[1];
+          string val3_=st[2];
+          string val2_=st[3];
+          if(isnum(val1_)&&isnum(val2_))
+            {
+
+              int val1=str_to_int(val1_);
+              int val2=str_to_int(val2_);
+             return juge_Expression<int,string,int>(val1,val3_,val2);
+            }
+          else if(isStr(val1_)&&isStr(val2_))
+            {
+              str_erase(val1_);
+               str_erase(val2_);
+               string val1=val1_;
+               string val2=val2_;
+             return  juge_Expression<string,string,string>(val1,val3_,val2);
+            }
+          else if(isStr(val1_)&&!isStr(val2_)&&!isnum(val2_))
+            {
+              str_erase(val1_);
+              string val1=val1_;
+              string str;
+              int Int;
+              Variable_get(val2_,str,Int,var_map_type,str_map,int_map);
+              if(!str.empty())
+                {
+                  string val2=str;
+                return  juge_Expression<string,string,string>(val1,val3_,val2);
+                }
+              else
+                {
+                  throw "类型不一致";
+                }
+
+
+
+            }
+          else if(isnum(val1_)&&!isStr(val2_)&&isnum(val2_))
+            {
+
+              int val1=str_to_int(val1_);
+              string str;
+              int Int;
+              Variable_get(val2_,str,Int,var_map_type,str_map,int_map);
+              if(Int)
+                {
+                  int val2=Int;
+                 return juge_Expression<int,string,int>(val1,val3_,val2);
+                }
+              else
+                {
+                  throw "类型不一致";
+                }
+
+
+            }
+          else if(isStr(val2_)&&!isStr(val1_)&&!isnum(val1_))
+            {
+              str_erase(val2_);
+              string val1=val2_;
+              string str;
+              int Int;
+              Variable_get(val1_,str,Int,var_map_type,str_map,int_map);
+              if(!str.empty())
+                {
+                  string val2=str;
+                 return juge_Expression<string,string,string>(val1,val3_,val2);
+                }
+              else
+                {
+                  throw "类型不一致";
+                }
+
+
+
+            }
+          else if(isnum(val2_)&&!isStr(val1_)&&!isnum(val1_))
+            {
+
+              int val2=str_to_int(val2_);
+              string str;
+              int Int;
+              Variable_get(val1_,str,Int,var_map_type,str_map,int_map);
+              if(Int)
+                {
+                  int val1=Int;
+                 return juge_Expression<int,string,int>(val1,val3_,val2);
+                }
+              else
+                {
+                  throw "类型不一致";
+                }
+
+
+            }
+          else
+            {
+              string str1;
+              int Int1;
+              string str2;
+              int Int2;
+              Variable_get(val1_,str1,Int1,var_map_type,str_map,int_map);
+              Variable_get(val2_,str2,Int2,var_map_type,str_map,int_map);
+              if(!str1.empty()&&!str2.empty())
+                {
+                  string val1=str1;
+                  string val2=str2;
+                  return juge_Expression<string,string,string>(val1,val3_,val2);
+                }
+              else if(Int1&&Int2)
+                {
+                   int val1=Int1;
+                   int val2=Int2;
+                 return  juge_Expression<int,string,int>(val1,val3_,val2);
+
+                }
+            }
+
     }
-  else if(isStr(val1_)&&isStr(val2_))
-    {
-      str_erase(val1_);
-       str_erase(val2_);
-       string val1=val1_;
-       string val2=val2_;
-     return  juge_Expression<string,string,string>(val1,val3_,val2);
-    }
-  else if(isStr(val1_)&&!isStr(val2_)&&!isnum(val2_))
-    {
-      str_erase(val1_);
-      string val1=val1_;
-      string str;
-      int Int;
-      Variable_get(val2_,str,Int,var_map_type,str_map,int_map);
-      if(!str.empty())
-        {
-          string val2=str;
-        return  juge_Expression<string,string,string>(val1,val3_,val2);
-        }
-      else
-        {
-          throw "类型不一致";
-        }
-
-
-
-    }
-  else if(isnum(val1_)&&!isStr(val2_)&&isnum(val2_))
-    {
-
-      int val1=str_to_int(val1_);
-      string str;
-      int Int;
-      Variable_get(val2_,str,Int,var_map_type,str_map,int_map);
-      if(Int)
-        {
-          int val2=Int;
-         return juge_Expression<int,string,int>(val1,val3_,val2);
-        }
-      else
-        {
-          throw "类型不一致";
-        }
-
-
-    }
-  else if(isStr(val2_)&&!isStr(val1_)&&!isnum(val1_))
-    {
-      str_erase(val2_);
-      string val1=val2_;
-      string str;
-      int Int;
-      Variable_get(val1_,str,Int,var_map_type,str_map,int_map);
-      if(!str.empty())
-        {
-          string val2=str;
-         return juge_Expression<string,string,string>(val1,val3_,val2);
-        }
-      else
-        {
-          throw "类型不一致";
-        }
-
-
-
-    }
-  else if(isnum(val2_)&&!isStr(val1_)&&!isnum(val1_))
-    {
-
-      int val2=str_to_int(val2_);
-      string str;
-      int Int;
-      Variable_get(val1_,str,Int,var_map_type,str_map,int_map);
-      if(Int)
-        {
-          int val1=Int;
-         return juge_Expression<int,string,int>(val1,val3_,val2);
-        }
-      else
-        {
-          throw "类型不一致";
-        }
-
-
-    }
-  else
-    {
-      string str1;
-      int Int1;
-      string str2;
-      int Int2;
-      Variable_get(val1_,str1,Int1,var_map_type,str_map,int_map);
-      Variable_get(val2_,str2,Int2,var_map_type,str_map,int_map);
-      if(!str1.empty()&&!str2.empty())
-        {
-          string val1=str1;
-          string val2=str2;
-          return juge_Expression<string,string,string>(val1,val3_,val2);
-        }
-      else if(Int1&&Int2)
-        {
-           int val1=Int1;
-           int val2=Int2;
-         return  juge_Expression<int,string,int>(val1,val3_,val2);
-
-        }
-    }
-  if(regex_match(code,st,nums))
-    {
+    else if(regex_match(code,st,nums))
+      {
      if(st[1]=="0")
        {
          return false;
@@ -615,16 +804,31 @@ string Interpreter::get_func_code(fstream &f) //获得定义函数的代码
   string code;
   smatch st1;
   int x=0;
-  regex end("\\};");
+  regex end("\\}");
+  regex if_re("如果(.*?)");
+  regex for_re("循环(.*?)");
   while(true)
     {
-      x++;
+
       getline(f,code);
       str=str+'\n'+code;
-      if(regex_match(code,st1,end))
+      if(regex_match(code,st1,if_re))
+        {
+          x++;
+        }
+      else if(regex_match(code,st1,for_re))
+        {
+          x++;
+        }
+      else if(regex_match(code,st1,end)&&x<=0)
         {
           break;
         }
+      else if(regex_match(code,st1,end))
+        {
+         x--;
+        }
+
     }
   return str;
 
@@ -697,7 +901,7 @@ void Interpreter::built_func(string func_name,string pre) //内部函数调用
 {
 
 }
-vector<string> Interpreter::split(string str,char pi) //自己写的一个字符串分割函数
+vector<string> Interpreter::split(string str,char pi) //字符串分割函数
 {
   vector<string> str_ve;
   string temporary;
