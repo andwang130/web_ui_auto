@@ -26,7 +26,7 @@ Mat CMyOpencv::current()
   DeleteDC(comhdc);
   return v_mat;
 }
-void CMyOpencv::Img_contrast(Mat imgMat,Mat temMat,int &x,int &y)
+void CMyOpencv::Img_contrast(Mat imgMat,Mat temMat,int &x,int &y,double &flag)
 {
   Mat rec;
   matchTemplate(imgMat,temMat,rec,TM_CCOEFF_NORMED);  //opencv模板匹配函数，4个参数，匹配的图片，模板图片，匹配返回的图片，和匹配的算法类型
@@ -35,15 +35,18 @@ void CMyOpencv::Img_contrast(Mat imgMat,Mat temMat,int &x,int &y)
   minMaxLoc(rec,&minVal,&maxVal,&minloc,&maxloc);
   x=maxloc.x;
   y=maxloc.y;
-  //100-minVal 计算匹配度。TM_CCOEFF_NORMED匹配，值越小匹配度越高，如果值越小100减去的值也越少
-
-
+  flag=maxVal;
 }
 Mat CMyOpencv::open_Imge(string path)
 {
-  return imread(path,-1); //opencv打开图片函数，返回的是Mat对象，Mat一个矩阵，opencv的函数都是对这个矩阵操作.-1为8位图，原通道，这样和全屏截图才是一样的
+  Mat img=imread(path,-1);
+  if(img.empty())
+    {
+     throw "打开图片失败";
+    }
+  return img; //opencv打开图片函数，返回的是Mat对象，Mat一个矩阵，opencv的函数都是对这个矩阵操作.-1为8位图，原通道，这样和全屏截图才是一样的
 }
-void CMyOpencv::Img_contrast(string path,string tempath,int &x,int &y)
+void CMyOpencv::Img_contrast(string path,string tempath,int &x,int &y,double &flag)
 {
   Mat rec;
   Mat imgMat=open_Imge(path);

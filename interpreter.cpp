@@ -984,7 +984,7 @@ void Interpreter::built_func(string func_name,string pre,map<string,string>type_
   vector<string>ver_pre=split(pre,',');
   int pre_size=ver_pre.size();
   cout<<pre_size<<endl;
-  cout<<"执行内部函数"<<endl;
+  cout<<"执行内部函数"<<func_name<<endl;
   if(func_name=="左键单击")
     {
       if(pre_size!=2)
@@ -1012,8 +1012,107 @@ void Interpreter::built_func(string func_name,string pre,map<string,string>type_
           oper->L_Click_d(x,y);
         }
     }
+  else if(func_name=="匹配单击")
+    {
+      if(pre_size!=1)
+        {
+          throw "需要参数是一个,请检查参数";
+        }
+      else
+        {
+          string path=Variable_Str(ver_pre[0],str_map);
 
+          oper->Match_Click(path,2);
+        }
+    }
+  else if(func_name=="匹配双击")
+    {
+      if(pre_size!=1)
+        {
+          throw "需要参数是一个,请检查参数";
+        }
+      else
+        {
+          string path=Variable_Str(ver_pre[0],str_map);
 
+          oper->Match_Click(path,1);
+        }
+    }
+  else if(func_name=="匹配移动")
+    {
+      if(pre_size!=1)
+        {
+          throw "需要参数是一个,请检查参数";
+        }
+      else
+        {
+          string path=Variable_Str(ver_pre[0],str_map);
+
+          oper->Math_Move(path);
+        }
+    }
+  else if(func_name=="右键单击")
+    {
+      if(pre_size!=2)
+        {
+          throw "需要参数是两个,请检查参数";
+        }
+      else
+        {
+          int x=Variable_INT(ver_pre[0],int_map);
+          int y=Variable_INT(ver_pre[1],int_map);
+          oper->R_Click(x,y);
+        }
+
+    }
+  else if(func_name=="右键双击")
+    {
+      if(pre_size!=2)
+        {
+          throw "需要参数是两个,请检查参数";
+        }
+      else
+        {
+          int x=Variable_INT(ver_pre[0],int_map);
+          int y=Variable_INT(ver_pre[1],int_map);
+          oper->R_click_d(x,y);
+        }
+
+    }
+  else if(func_name=="输入字符")
+    {
+      {
+        if(pre_size!=1)
+          {
+            throw "需要参数是一个,请检查参数";
+          }
+        else
+          {
+            string str=Variable_Str(ver_pre[0],str_map);
+
+            oper->input(str);
+          }
+      }
+    }
+  else if(func_name=="按键按下")
+    {
+      {
+        if(pre_size!=1)
+          {
+            throw "需要参数是一个,请检查参数";
+          }
+        else
+          {
+            string str=Variable_Str(ver_pre[0],str_map);
+            char p=str[0];
+            oper->Press_one(p);
+          }
+      }
+    }
+  else
+    {
+      throw "不存在的函数";
+    }
 }
 vector<string> Interpreter::split(string str,char pi) //字符串分割函数
 {

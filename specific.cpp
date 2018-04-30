@@ -20,7 +20,8 @@ void Integration::Match_Click(string path, const int click_falg)
   Mat img=Mopen_cv->open_Imge(path); //打开图片
   Mat tem=Mopen_cv->current();//获取屏幕截图的Mat
   int x,y; //初始化X,Y
-  Mopen_cv->Img_contrast(img,tem,x,y); //图片对比，获得X,Y值
+  double flag;
+  Mopen_cv->Img_contrast(img,tem,x,y,flag); //图片对比，获得X,Y值
   x=x+img.cols/2;
   y=y+img.rows/2;
   if(click_falg==IN_DOUBLE)
@@ -37,11 +38,18 @@ void Integration::Math_Move(string path)
 {
   Mat img=Mopen_cv->open_Imge(path); //打开图片
   Mat tem=Mopen_cv->current();//获取屏幕截图的Mat
+  cout<<img.size<<endl;
+  cout<<tem.size<<endl;
   int x,y; //初始化X,Y
-  Mopen_cv->Img_contrast(img,tem,x,y); //图片对比，获得X,Y值
+  double flag;
+  Mopen_cv->Img_contrast(img,tem,x,y,flag); //图片对比，获得X,Y值
   x=x+img.cols/2;
   y=y+img.rows/2;
+  if(flag>=0.9)
+    {
+
   Contr->mouse_move(x,y);
+    }
 }
 void Integration::L_Click(int x,int y){
   Contr->mouse_left_click(x,y);

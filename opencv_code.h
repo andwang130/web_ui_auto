@@ -21,7 +21,7 @@ public:
   Mat screenshot(int x,int y);//使用opencv进行截图，传入两个参数
   Mat current(void);//对当前屏幕进行截图
   Mat open_Imge(string path);//使用opencv打开一张图片，返回这张图片的Mat
-  void Img_contrast(Mat imgMat,Mat temMat,int &x,int &y);//传入两张图片的Mat，进行对比，需要传入x,y的坐标
-  void Img_contrast(string path,string tempath,int &x,int &y);//传入两个路径做对比
+  void Img_contrast(Mat imgMat,Mat temMat,int &x,int &y,double &flag);//传入两张图片的Mat，进行对比，需要传入x,y的坐标
+  void Img_contrast(string path,string tempath,int &x,int &y,double &flag);//传入两个路径做对比
 
 };
