@@ -22,6 +22,7 @@ void Interpreter::run(string path)
           vector<string> pre_str=split(st1[2],','); //将参分割
           pre_list[st1[1]]=pre_str;
           func_code=get_func_code(f);   //转到函数代码的获取
+
           fun_list[st1[1]]=code+func_code; //获取到代码了，函数名为键，存到保存函数的map当中
         }
       else if(regex_match(code,st1,if_re))  //匹配到IF语句
@@ -561,7 +562,7 @@ void Interpreter::implement(string code,map<string,string>&var_map_type,map<stri
 
       if(impt_code!="")
         {
-          cout<<"函数存在"<<st1[1]<<endl;
+
           fun_inte(st1[1],impt_code,pre);  //该函数存在，为定义函数转到定义函数调用
         }
       else
