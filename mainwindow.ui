@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1225</width>
-    <height>610</height>
+    <width>1295</width>
+    <height>644</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>520</y>
+      <x>630</x>
+      <y>550</y>
       <width>93</width>
       <height>28</height>
      </rect>
@@ -30,24 +30,237 @@
    <widget class="QListView" name="listView">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>10</x>
       <y>0</y>
-      <width>211</width>
-      <height>551</height>
+      <width>241</width>
+      <height>581</height>
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QListView" name="listView_2">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>72</width>
-      <height>15</height>
+      <x>260</x>
+      <y>0</y>
+      <width>951</width>
+      <height>511</height>
      </rect>
     </property>
-    <property name="text">
-     <string>TextLabel</string>
+   </widget>
+   <widget class="QToolBox" name="toolBox">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>0</y>
+      <width>221</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="page">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>221</width>
+       <height>241</height>
+      </rect>
+     </property>
+     <attribute name="label">
+      <string>左键单击</string>
+     </attribute>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>1</x>
+        <y>11</y>
+        <width>120</width>
+        <height>75</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;左键单击事件：&lt;/p&gt;&lt;p&gt;需要传入两个参数&lt;/p&gt;&lt;p&gt;位置的X，Y&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="Lclick_Button">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>170</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>插入</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="layoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>201</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>X：</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="Lclick_x">
+         <property name="maximum">
+          <number>4000</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Y</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="Lclick_y">
+         <property name="maximum">
+          <number>4000</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_8">
+     <attribute name="label">
+      <string>左键双击</string>
+     </attribute>
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>170</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>插入</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>1</x>
+        <y>11</y>
+        <width>120</width>
+        <height>75</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;左键双击事件：&lt;/p&gt;&lt;p&gt;需要传入两个参数&lt;/p&gt;&lt;p&gt;位置的X，Y&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>100</y>
+        <width>201</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>X：</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="Lclick_d_x">
+         <property name="maximum">
+          <number>4000</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Y</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="Lclick_d_y">
+         <property name="maximum">
+          <number>4000</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_9">
+     <attribute name="label">
+      <string>页</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="page_2">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>221</width>
+       <height>241</height>
+      </rect>
+     </property>
+     <attribute name="label">
+      <string>Page 2</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="page_4">
+     <attribute name="label">
+      <string>页</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="page_5">
+     <attribute name="label">
+      <string>页</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="page_3">
+     <attribute name="label">
+      <string>页</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="page_6">
+     <attribute name="label">
+      <string>页</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="page_7">
+     <attribute name="label">
+      <string>页</string>
+     </attribute>
+    </widget>
+   </widget>
+   <widget class="QTextEdit" name="code_text">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>0</y>
+      <width>951</width>
+      <height>511</height>
+     </rect>
     </property>
    </widget>
   </widget>
@@ -56,7 +269,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1225</width>
+     <width>1295</width>
      <height>26</height>
     </rect>
    </property>

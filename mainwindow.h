@@ -18,9 +18,17 @@ public:
 private slots:
   void on_pushButton_clicked();
 
+
+  void on_Lclick_Button_clicked();
+
+
+  void on_code_text_cursorPositionChanged();
+
+
 private:
   Ui::MainWindow *ui;
   Interpreter *integ;
+  int Psti;
 };
 
 #endif // MAINWINDOW_H
