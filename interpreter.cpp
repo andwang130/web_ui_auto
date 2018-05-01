@@ -457,10 +457,12 @@ bool Interpreter::juge_Expression(v1 val1,sy symbol,v2 val2)
 }
 int Interpreter::Variable_INT(string var,map<string,int>&int_map)
 {
+
   if(isnum(var))
     {
       return str_to_int(var);
     }
+
   else
     {
       if(int_map.find(var)==int_map.end())
@@ -544,8 +546,9 @@ void Interpreter::implement(string code,map<string,string>&var_map_type,map<stri
   regex func_impt("\\s*(\\S+)\\((.*?)\\)"); //匹配函数调用
   regex variable_re("\\s*(整型|字符串)\\s(\\w+)");  //匹配变量定义
   regex Variable_inte_re("\\s*(整型|字符串)\\s(\\w+)=(\\S+)"); //匹配变量定义同时赋值
-  regex Variable_ass("\\s*(\\w+)=(\\S+)"); //匹配变量赋值
+  regex Variable_ass("\\s*(\\w+)=(\\w+)"); //匹配变量赋值
   regex print_re("\\s*打印\\((\\S+)\\)");//匹配打印
+  regex operation_re("\\s*(\\w+)=(\\S+)"); //运算匹配
    if(regex_match(code,st1,func_impt)&&st1[1]!="打印")  //匹配到函数调用
     {
       string impt_code;
@@ -591,15 +594,16 @@ void Interpreter::implement(string code,map<string,string>&var_map_type,map<stri
 
   else if(regex_match(code,st1,Variable_ass))  //匹配赋值
     {
-
       string var_name=st1[1];
       string value=st1[2];
       string var_type=var_map_type[var_name];
-
+      if(var_type.empty())
+        {
+          var_type=para_type[var_name];
+        }
       if(var_type==Str_IN)
         {
            Variable_inte(var_name,str_map,value);
-           cout<<"f赋值"<<endl;
         }
       else if(var_type==Int_IN)
         {
@@ -708,8 +712,192 @@ void Interpreter::implement(string code,map<string,string>&var_map_type,map<stri
           throw "未定义的变量";
          }
      }
+   else if(regex_match(code,st1,operation_re))
+     {
+       int type_flag=var_Is_defined(st1[1],var_map_type);
+       string var_name=st1[1];
+       if(type_flag==3)
+         {
+            throw "变量未定义";
+         }
+       else if(type_flag==1)
+         {
+           string var_type=var_map_type[var_name];
+           if(var_type==Str_IN)
+             {
+              str_map[var_name]=operation_str(st1[2],var_map_type,str_map,int_map);
+             }
+           else if(var_type==Int_IN)
+             {
+               int_map[var_name]=operation_int(st1[2],var_map_type,str_map,int_map);
+
+             }
+         }
+       else if(type_flag==2)
+         {
+           string var_type=para_type[var_name];
+           if(var_type==Str_IN)
+             {
+              para_str[var_name]=operation_str(st1[2],var_map_type,str_map,int_map);
+             }
+           else if(var_type==Int_IN)
+             {
+               para_Int[var_name]=operation_int(st1[2],var_map_type,str_map,int_map);
+
+             }
+
+         }
+
+
+
+
+     }
+}
+string Interpreter::operation_str(string code,map<string,string>type_map,map<string,string>str_map,map<string,int>int_map)
+{
+  string reutn_str;
+   string str_num;
+  for(int i=0;i<code.size();i++)
+    {
+
+      if(code[i]=='+'||code[i]=='-'||code[i]=='*'||code[i]=='/')
+      {
+
+         string R_str_num=get_Left_value(code,i);
+
+         if(!reutn_str.empty())
+           {
+
+             switch (code[i])
+               {
+               case '+':
+                 reutn_str=reutn_str+Variable_Str(R_str_num,str_map);
+                 break;
+               case '-':
+                 throw "字符类型不支持—操作符";
+                 break;
+                case '*':
+                throw "字符类型不支持*操作符";
+                 break;
+               case '/':
+                throw "字符类型不支持/操作符";
+                break;
+               }
+
+           }
+         else
+           {
+
+            switch (code[i])
+              {
+              case '+':
+                reutn_str=Variable_Str(str_num,str_map)+Variable_Str(R_str_num,str_map);
+                break;
+              case '-':
+              throw "字符类型不支持—操作符";
+                break;
+               case '*':
+               throw "字符类型不支持*操作符";
+                break;
+              case '/':
+               throw "字符类型不支持/操作符";
+               break;
+              }
+
+           }
+
+      str_num="";
+      }
+      else
+        {
+          str_num=str_num+code[i];
+        }
+
+    }
+ return reutn_str;
+}
+
+int Interpreter::operation_int(string code,map<string,string>type_map,map<string,string>str_map,map<string,int>int_map)
+{
+  int reutn_num;
+   string str_num;
+  for(int i=0;i<code.size();i++)
+    {
+
+      if(code[i]=='+'||code[i]=='-'||code[i]=='*'||code[i]=='/')
+      {
+
+         string R_str_num=get_Left_value(code,i);
+
+         if(reutn_num)
+           {
+
+             switch (code[i])
+               {
+               case '+':
+                 reutn_num=reutn_num+Variable_INT(R_str_num,int_map);
+                 break;
+               case '-':
+                 reutn_num=reutn_num-Variable_INT(R_str_num,int_map);
+                 break;
+                case '*':
+                 reutn_num=reutn_num*Variable_INT(R_str_num,int_map);
+                 break;
+               case '/':
+                reutn_num=reutn_num/Variable_INT(R_str_num,int_map);
+                break;
+               }
+
+           }
+         else
+           {
+
+            switch (code[i])
+              {
+              case '+':
+                reutn_num=Variable_INT(str_num,int_map)+Variable_INT(R_str_num,int_map);
+                break;
+              case '-':
+               reutn_num=Variable_INT(str_num,int_map)-Variable_INT(R_str_num,int_map);
+                break;
+               case '*':
+               reutn_num=Variable_INT(str_num,int_map)*Variable_INT(R_str_num,int_map);
+                break;
+              case '/':
+               reutn_num=Variable_INT(str_num,int_map)/Variable_INT(R_str_num,int_map);
+               break;
+              }
+
+           }
+
+      str_num="";
+      }
+      else
+        {
+          str_num=str_num+code[i];
+        }
+
+    }
+ return reutn_num;
+}
+string Interpreter::get_Left_value(string str,int &x)
+{
+  string str_num;
+ for(int i=x+1 ;i<str.size();i++)
+   {
+
+     if(str[i]=='+'||str[i]=='-'||str[i]=='*'||str[i]=='/')
+     {
+         return str_num;
+     }
+     else
+       {
+          str_num=str_num+str[i];
+       }
 
 }
+ return str_num;
+   }
 void Interpreter::Variable_matching(string var_type,string var_name,map<string,string> &Vartype_map)//变量匹配
 {
   if(var_type=="字符串")
@@ -1094,7 +1282,7 @@ void Interpreter::built_func(string func_name,string pre,map<string,string>type_
           }
       }
     }
-  else if(func_name=="按键按下")
+  else if(func_name=="键盘按键")
     {
       {
         if(pre_size!=1)
@@ -1108,6 +1296,51 @@ void Interpreter::built_func(string func_name,string pre,map<string,string>type_
             oper->Press_one(p);
           }
       }
+    }
+  else if(func_name=="按键按下")
+    {
+      {
+        if(pre_size!=1)
+          {
+            throw "需要参数是一个,请检查参数";
+          }
+        else
+          {
+            string str=Variable_Str(ver_pre[0],str_map);
+            char p=str[0];
+            oper->Press_lower(p);
+          }
+      }
+    }
+  else if(func_name=="按键弹起")
+    {
+
+        if(pre_size!=1)
+          {
+            throw "需要参数是一个,请检查参数";
+          }
+        else
+          {
+            string str=Variable_Str(ver_pre[0],str_map);
+            char p=str[0];
+            oper->Bounce(p);
+          }
+
+
+    }
+  else if(func_name=="休眠")
+    {
+      if(pre_size!=1)
+        {
+          throw "需要参数是一个,请检查参数";
+        }
+      else
+        {
+          int s=Variable_INT(ver_pre[0],int_map);
+
+          oper->m_sleep(s);
+        }
+
     }
   else
     {

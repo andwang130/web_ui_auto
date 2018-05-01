@@ -26,4 +26,5 @@ void Press_one(char str);//按一个键，自动会谈起
 void Press_lower(char str);//按下一个键不弹起
 void Bounce(char str);//弹起一个键
 void input(string str);//输入字符串
+void m_sleep(int s);
 };

@@ -84,3 +84,7 @@ void Integration::input(string str)//输入字符串
 {
   Contr->input_string(str);
 }
+void Integration::m_sleep(int s)
+{
+  Sleep(s);
+}

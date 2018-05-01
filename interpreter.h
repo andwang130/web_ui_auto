@@ -49,6 +49,9 @@ class Interpreter
   void for_init(string code,string if_Expression,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map);
   int Variable_INT(string var,map<string,int>&int_map);//获取整型变量的值
   string Variable_Str(string var,map<string,string>&str_map);//获取字符串变量的值
+  string get_Left_value(string str,int &x);
+  int operation_int(string code,map<string,string>type_map,map<string,string>str_map,map<string,int>int_map);//整型计算
+  string operation_str(string code,map<string,string>type_map,map<string,string>str_map,map<string,int>int_map);
 public:
   Interpreter()
   {
