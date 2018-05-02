@@ -57,7 +57,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>10</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="page">
      <property name="geometry">
@@ -397,7 +397,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit">
+          <widget class="QLineEdit" name="key_input">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -425,7 +425,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="Rclick_Button_d_2">
+        <widget class="QPushButton" name="input_key_butto">
          <property name="text">
           <string>插入</string>
          </property>
@@ -485,7 +485,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_2">
+          <widget class="QLineEdit" name="str_input">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -513,7 +513,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="Rclick_Button_d_3">
+        <widget class="QPushButton" name="input_str_butto">
          <property name="text">
           <string>插入</string>
          </property>
@@ -573,7 +573,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_3">
+          <widget class="QLineEdit" name="move_path">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -716,7 +716,7 @@
         <x>0</x>
         <y>0</y>
         <width>221</width>
-        <height>331</height>
+        <height>301</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_10" stretch="4,0,0,1">
@@ -797,7 +797,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;判断语法：&lt;/p&gt;&lt;p&gt;不做插入按钮，提供具体语法：&lt;/p&gt;&lt;p&gt;语法如下，在()中a只要满足&amp;gt;2{}的&lt;/p&gt;&lt;p&gt;语句才会执行&lt;/p&gt;&lt;p&gt;如果(A&amp;gt;2)&lt;/p&gt;&lt;p&gt;{&lt;/p&gt;&lt;p&gt;左键点击（122,122）&lt;/p&gt;&lt;p&gt;}&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;判断语法：&lt;/p&gt;&lt;p&gt;不做插入按钮，提供具体语法：&lt;/p&gt;&lt;p&gt;语法如下，在()中a只要满足&amp;gt;2{}的&lt;/p&gt;&lt;p&gt;语句才会执行&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;如果(A&amp;gt;2)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;{&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;左键点击（122,122）&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </widget>
@@ -810,8 +810,8 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>219</width>
-        <height>255</height>
+        <width>191</width>
+        <height>271</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -821,7 +821,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;变量定义：&lt;/p&gt;&lt;p&gt;暂时提供两种类型的变量&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;变量定义：&lt;/p&gt;&lt;p&gt;暂时提供两种类型的变量&lt;/p&gt;&lt;p&gt;整型，字符串，定义如下&lt;/p&gt;&lt;p&gt;A,B 为变量名称&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;整型 A=2&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;字符串 B=&amp;quot;hello word&amp;quot;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;可以在定义的时候赋值&lt;/p&gt;&lt;p&gt;也可以在之后赋值&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </widget>

@@ -76,3 +76,17 @@ void MainWindow::on_Rclick_Button_d_clicked()
   QString code=QString("右键双击(%1,%2)\n").arg(x).arg(y);
   ui->code_text->textCursor().insertText(code);
 }
+
+void MainWindow::on_input_key_butto_clicked()
+{
+    QString key=ui->key_input->text();
+    QString code=QString("键盘按键(%1)\n").arg(key);
+    ui->code_text->textCursor().insertText(code);
+}
+
+void MainWindow::on_input_str_butto_clicked()
+{
+    QString str=ui->str_input->text();
+    QString code=QString("输入字符(%1)\n").arg(str);
+    ui->code_text->textCursor().insertText(code);
+}

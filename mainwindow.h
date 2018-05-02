@@ -31,6 +31,10 @@ private slots:
 
   void on_Rclick_Button_d_clicked();
 
+  void on_input_key_butto_clicked();
+
+  void on_input_str_butto_clicked();
+
 private:
   Ui::MainWindow *ui;
   Interpreter *integ;
