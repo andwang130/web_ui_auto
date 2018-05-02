@@ -25,6 +25,12 @@ private slots:
   void on_code_text_cursorPositionChanged();
 
 
+  void on_Lclick_Button_d_clicked();
+
+  void on_Rclick_Button_clicked();
+
+  void on_Rclick_Button_d_clicked();
+
 private:
   Ui::MainWindow *ui;
   Interpreter *integ;
