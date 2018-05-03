@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1322</width>
-    <height>720</height>
+    <width>1333</width>
+    <height>755</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>550</y>
+      <x>660</x>
+      <y>670</y>
       <width>93</width>
       <height>28</height>
      </rect>
@@ -27,51 +27,37 @@
      <string>PushButton</string>
     </property>
    </widget>
-   <widget class="QListView" name="listView">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>0</y>
-      <width>251</width>
-      <height>661</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QListView" name="listView_2">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>0</y>
-      <width>951</width>
-      <height>511</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QToolBox" name="toolBox">
     <property name="geometry">
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>221</width>
-      <height>631</height>
+      <width>231</width>
+      <height>621</height>
      </rect>
     </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>8</number>
     </property>
     <widget class="QWidget" name="page">
      <property name="geometry">
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>221</width>
-       <height>301</height>
+       <width>231</width>
+       <height>291</height>
       </rect>
      </property>
      <attribute name="label">
       <string>左键单击</string>
      </attribute>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -138,8 +124,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>221</width>
-       <height>301</height>
+       <width>231</width>
+       <height>291</height>
       </rect>
      </property>
      <attribute name="label">
@@ -204,13 +190,13 @@
       </layout>
      </widget>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="widget">
      <property name="geometry">
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>221</width>
-       <height>301</height>
+       <width>231</width>
+       <height>291</height>
       </rect>
      </property>
      <attribute name="label">
@@ -280,8 +266,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>221</width>
-       <height>301</height>
+       <width>231</width>
+       <height>291</height>
       </rect>
      </property>
      <attribute name="label">
@@ -351,8 +337,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>221</width>
-       <height>301</height>
+       <width>231</width>
+       <height>291</height>
       </rect>
      </property>
      <attribute name="label">
@@ -363,7 +349,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>221</width>
+        <width>284</width>
         <height>241</height>
        </rect>
       </property>
@@ -439,8 +425,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>221</width>
-       <height>301</height>
+       <width>231</width>
+       <height>291</height>
       </rect>
      </property>
      <attribute name="label">
@@ -451,7 +437,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>221</width>
+        <width>292</width>
         <height>241</height>
        </rect>
       </property>
@@ -527,8 +513,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>221</width>
-       <height>301</height>
+       <width>231</width>
+       <height>291</height>
       </rect>
      </property>
      <attribute name="label">
@@ -544,6 +530,9 @@
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_8" stretch="4,0,1">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
        <item>
         <widget class="QLabel" name="label_20">
          <property name="sizePolicy">
@@ -558,9 +547,16 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="2,4,2">
+        <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="0,2,2">
          <item>
-          <widget class="QLabel" name="label_21">
+          <widget class="QPushButton" name="Button_path_mv">
+           <property name="text">
+            <string>选择图片</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="img_mv_path">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -568,17 +564,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>字符串:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="move_path">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+            <string/>
            </property>
           </widget>
          </item>
@@ -601,7 +587,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="Rclick_Button_d_4">
+        <widget class="QPushButton" name="Math_Move_butto">
          <property name="text">
           <string>插入</string>
          </property>
@@ -615,8 +601,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>221</width>
-       <height>301</height>
+       <width>231</width>
+       <height>291</height>
       </rect>
      </property>
      <attribute name="label">
@@ -628,10 +614,10 @@
         <x>0</x>
         <y>0</y>
         <width>221</width>
-        <height>241</height>
+        <height>245</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_9" stretch="4,0,1">
+      <layout class="QVBoxLayout" name="verticalLayout_9" stretch="4,0,0,1">
        <item>
         <widget class="QLabel" name="label_22">
          <property name="sizePolicy">
@@ -646,9 +632,16 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="2,4,2">
+        <layout class="QHBoxLayout" name="horizontalLayout_14" stretch="0,2,2">
          <item>
-          <widget class="QLabel" name="label_23">
+          <widget class="QPushButton" name="Button_path_click">
+           <property name="text">
+            <string>选择图片</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="img_click_path">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -656,17 +649,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>字符串:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_4">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+            <string/>
            </property>
           </widget>
          </item>
@@ -689,7 +672,10 @@
         </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="Rclick_Button_d_5">
+        <layout class="QHBoxLayout" name="horizontalLayout_11" stretch=""/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="Math_click_butto">
          <property name="text">
           <string>插入</string>
          </property>
@@ -703,8 +689,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>221</width>
-       <height>301</height>
+       <width>231</width>
+       <height>291</height>
       </rect>
      </property>
      <attribute name="label">
@@ -715,11 +701,11 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>221</width>
-        <height>301</height>
+        <width>231</width>
+        <height>291</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_10" stretch="4,0,0,1">
+      <layout class="QVBoxLayout" name="verticalLayout_10" stretch="0,0,0,1">
        <item>
         <widget class="QLabel" name="label_24">
          <property name="sizePolicy">
@@ -743,7 +729,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="Lclick_x_d_2">
+          <widget class="QSpinBox" name="while_num">
            <property name="maximum">
             <number>4000</number>
            </property>
@@ -765,10 +751,10 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_12" stretch=""/>
+        <layout class="QHBoxLayout" name="horizontalLayout_12"/>
        </item>
        <item>
-        <widget class="QPushButton" name="Rclick_Button_d_6">
+        <widget class="QPushButton" name="while_butto">
          <property name="text">
           <string>插入</string>
          </property>
@@ -778,6 +764,14 @@
      </widget>
     </widget>
     <widget class="QWidget" name="page_9">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>231</width>
+       <height>291</height>
+      </rect>
+     </property>
      <attribute name="label">
       <string>判断</string>
      </attribute>
@@ -802,6 +796,14 @@
      </widget>
     </widget>
     <widget class="QWidget" name="page_10">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>231</width>
+       <height>291</height>
+      </rect>
+     </property>
      <attribute name="label">
       <string>页</string>
      </attribute>
@@ -826,36 +828,70 @@
      </widget>
     </widget>
    </widget>
+   <widget class="QTextEdit" name="code_text_2">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>540</y>
+      <width>951</width>
+      <height>111</height>
+     </rect>
+    </property>
+   </widget>
    <widget class="QTextEdit" name="code_text">
     <property name="geometry">
      <rect>
       <x>260</x>
-      <y>0</y>
+      <y>10</y>
       <width>951</width>
       <height>511</height>
      </rect>
     </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1322</width>
-     <height>26</height>
-    </rect>
-   </property>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
+    <enum>BottomToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1333</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuauto">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="actionopen"/>
+    <addaction name="action_3"/>
+   </widget>
+   <addaction name="menuauto"/>
+  </widget>
+  <action name="actionopen">
+   <property name="text">
+    <string>打开</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>新建</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
