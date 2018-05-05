@@ -5,6 +5,7 @@
 #include<string>
 #include<QDebug>
 #include<QFileDialog>
+#include<spapidef.h>
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -24,6 +25,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
+
+
   try{
    integ->run("C:/Users/me/Desktop/plan.txt");
   }

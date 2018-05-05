@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-
+QT += webenginewidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,17 +30,22 @@ SOURCES += \
     control.cpp \
     opencv_code.cpp \
     specific.cpp \
-    interpreter.cpp
+    interpreter.cpp \
+    webform.cpp \
+    webpoer.cpp
 
 HEADERS += \
         mainwindow.h \
     control.h \
     opencv_code.h \
     specific.h \
-    interpreter.h
+    interpreter.h \
+    webform.h \
+    weboper.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    webform.ui
 
 
 

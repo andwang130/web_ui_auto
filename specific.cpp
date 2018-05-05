@@ -88,3 +88,43 @@ void Integration::m_sleep(int s)
 {
   Sleep(s);
 }
+void Integration:: open_web(string url)
+{
+  Cweboper *webop=new Cweboper(url);
+  web_list.push_back(*webop);
+  web_now=webop;
+}
+int Integration::web_num()
+{
+  return web_list.size();
+}
+void Integration::switch_web(int i)
+{
+  if(i>web_num()||i<0)
+    {
+      throw "超越界限";
+    }
+  else
+    {
+      *web_now=web_list[i];
+    }
+}
+void Integration::xpath_cilck(string path)
+{
+  web_now->click_PATH(path);
+}//点击一个元素,通过xpath定位的
+
+void Integration::id_click(string path)
+{
+  web_now->click_id(path);
+}
+void Integration::xpath_input(string path,string str)
+{
+  web_now->input_PATH(path,str);
+
+}
+void Integration::id_input(string path,string str)
+{
+  web_now->input_id(path,str);
+}
+

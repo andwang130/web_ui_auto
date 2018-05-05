@@ -1343,6 +1343,72 @@ void Interpreter::built_func(string func_name,string pre,map<string,string>type_
         }
 
     }
+  else if(func_name=="打开浏览器")
+    {
+
+      if(pre_size!=1)
+        {
+          throw "需要参数是一个,请检查参数";
+        }
+      else
+        {
+          string s=Variable_Str(ver_pre[0],str_map);
+
+          oper->open_web(s);
+        }
+    }
+  else if(func_name=="xpath点击")
+    {
+      if(pre_size!=1)
+        {
+          throw "需要参数是一个,请检查参数";
+        }
+      else
+        {
+          string s=Variable_Str(ver_pre[0],str_map);
+
+          oper->xpath_cilck(s);
+        }
+    }
+ else if(func_name=="ID点击")
+    {
+      if(pre_size!=1)
+              {
+                throw "需要参数是一个,请检查参数";
+              }
+            else
+              {
+                string s=Variable_Str(ver_pre[0],str_map);
+
+                oper->id_click(s);
+              }
+    }
+  else if(func_name=="xpath输入")
+    {
+      if(pre_size!=2)
+              {
+                throw "需要参数是两个个,请检查参数";
+              }
+            else
+              {
+                string s=Variable_Str(ver_pre[0],str_map);
+                string s2=Variable_Str(ver_pre[1],str_map);
+                oper->xpath_input(s,s2);
+              }
+    }
+  else if(func_name=="id输入")
+    {
+      if(pre_size!=2)
+              {
+                throw "需要参数是两个个,请检查参数";
+              }
+            else
+              {
+                string s=Variable_Str(ver_pre[0],str_map);
+                string s2=Variable_Str(ver_pre[1],str_map);
+                oper->id_input(s,s2);
+              }
+    }
   else
     {
       throw "不存在的函数";
