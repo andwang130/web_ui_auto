@@ -111,20 +111,29 @@ void Integration::switch_web(int i)
 }
 void Integration::xpath_cilck(string path)
 {
-  web_now->click_PATH(path);
+
+
+  thread ska1(&Cweboper::click_PATH,path,web_now);
 }//点击一个元素,通过xpath定位的
 
 void Integration::id_click(string path)
 {
-  web_now->click_id(path);
+
+ thread ska1(&Cweboper::click_id,path,web_now);
+ ska1.join();
 }
 void Integration::xpath_input(string path,string str)
 {
-  web_now->input_PATH(path,str);
 
+
+  thread ska1(&Cweboper::input_PATH,path,str,web_now);
+  ska1.join();
 }
 void Integration::id_input(string path,string str)
 {
-  web_now->input_id(path,str);
+
+
+ thread  ska1(&Cweboper::input_id,path,str,web_now);
+  ska1.join();
 }
 

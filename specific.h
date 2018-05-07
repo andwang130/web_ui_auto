@@ -5,6 +5,7 @@
 #include<control.h>
 #include<opencv_code.h>
 #include<weboper.h>
+#include<thread> //多线程库;
 //************************
 //封装的整合操作类,供解释类调用
 class Integration
@@ -16,6 +17,7 @@ vector<Cweboper> web_list; //保存打开的浏览器类实例
 Cweboper *web_now;//当前浏览器实例
 static const int IN_DOUBLE=1;//双击参数
 static const int IN_ONE=2;//单击参数
+
 public:
 Integration();//构造函数
 ~Integration();//析构函数
