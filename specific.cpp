@@ -91,6 +91,7 @@ void Integration::m_sleep(int s)
 void Integration:: open_web(string url)
 {
   Cweboper *webop=new Cweboper(url);
+  qDebug()<<"webop"<<&*webop<<endl;
   web_list.push_back(*webop);
   web_now=webop;
 }
@@ -109,31 +110,35 @@ void Integration::switch_web(int i)
       *web_now=web_list[i];
     }
 }
+//void func(string path,Cweboper &web)
+//{
+//  web.click_PATH(path);
+
+//}
 void Integration::xpath_cilck(string path)
 {
 
 
-  thread ska1(&Cweboper::click_PATH,path,web_now);
+    web_now->click_PATH(path);
+
 }//点击一个元素,通过xpath定位的
 
 void Integration::id_click(string path)
 {
 
- thread ska1(&Cweboper::click_id,path,web_now);
- ska1.join();
+
+ web_now->click_id(path);
 }
 void Integration::xpath_input(string path,string str)
 {
 
 
-  thread ska1(&Cweboper::input_PATH,path,str,web_now);
-  ska1.join();
+  web_now->input_PATH(path,str);
 }
 void Integration::id_input(string path,string str)
 {
 
 
- thread  ska1(&Cweboper::input_id,path,str,web_now);
-  ska1.join();
+web_now->input_id(path,str);
 }
 

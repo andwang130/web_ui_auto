@@ -16,7 +16,7 @@ webForm::webForm(QWidget *parent,QString url) :
 }
 void webForm::webfind_load(bool ok)
 {
-
+ load_flag=true;
 }
 void webForm::load_progress(int por)
 {
@@ -34,11 +34,12 @@ void webForm::load_progress(int por)
  {
    while(true)
      {
-       if(load_flag)
+       if(load_flag==true)
          {
-           break;
+          break;
 
          }
+       QApplication::processEvents();
      }
  }
 void webForm::resizeEvent(QResizeEvent *event)
