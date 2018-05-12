@@ -50,4 +50,5 @@ void webForm::resizeEvent(QResizeEvent *event)
 webForm::~webForm()
 {
   delete ui;
+  delete webview;
 }

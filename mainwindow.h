@@ -14,10 +14,11 @@ class MainWindow : public QMainWindow
 public:
   explicit MainWindow(QWidget *parent = 0);
   ~MainWindow();
+  void actionopen_clickde();
+  void svae_code();
 
 private slots:
   void on_pushButton_clicked();
-
 
   void on_Lclick_Button_clicked();
 
@@ -45,10 +46,13 @@ private slots:
 
   void on_while_butto_clicked();
 
+  void on_actionopen_triggered();
+
 private:
   Ui::MainWindow *ui;
   Interpreter *integ;
   int Psti;
+  string path;
 
 };
 

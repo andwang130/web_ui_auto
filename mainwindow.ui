@@ -43,7 +43,7 @@
      </sizepolicy>
     </property>
     <property name="currentIndex">
-     <number>8</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="page">
      <property name="geometry">
@@ -672,7 +672,7 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_11" stretch=""/>
+        <layout class="QHBoxLayout" name="horizontalLayout_11"/>
        </item>
        <item>
         <widget class="QPushButton" name="Math_click_butto">
@@ -702,7 +702,7 @@
         <x>0</x>
         <y>0</y>
         <width>231</width>
-        <height>291</height>
+        <height>342</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_10" stretch="0,0,0,1">
@@ -877,12 +877,19 @@
     <property name="title">
      <string>文件</string>
     </property>
+    <addaction name="separator"/>
     <addaction name="actionopen"/>
     <addaction name="action_3"/>
    </widget>
    <addaction name="menuauto"/>
   </widget>
   <action name="actionopen">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>打开</string>
    </property>

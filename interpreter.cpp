@@ -11,7 +11,7 @@ void Interpreter::run(string path)
     }
   string code;
   smatch st1;
-  regex func_re("\\s*函数 (\\w+)\\((.*?)\\)"); //匹配脚本写的函数
+  regex func_re("\\s*函数 (\\w+)\\((.*?)\\)\\s*"); //匹配脚本写的函数
   regex if_re("\\s*如果(.*?)");
   regex for_re("\\s*循环(.*?)");//循环匹配
   while(getline(f,code)) //逐行读取
@@ -37,7 +37,7 @@ void Interpreter::run(string path)
         }
      else if(regex_match(code,st1,for_re))
         {
-           cout<<"匹配到for"<<"********"<<endl;
+
           string if_Expression=st1[1];
           string for_code=skip_for(f);
           for_init(for_code,if_Expression,para_type,para_str,para_Int);
@@ -50,6 +50,7 @@ void Interpreter::run(string path)
 
         }
     }
+  f.close();
 
 
 }
@@ -57,7 +58,7 @@ void Interpreter::for_init(string code,string if_Expression,map<string,string>&v
 {
   smatch st1;
   vector<string> vect_if_code=split(code,'\n');
-  regex exp_num("\\((\\d+)\\)");
+  regex exp_num("\\((\\d+)\\)\\s*");
   int for_num=1;
   if(regex_match(if_Expression,st1,exp_num))
     {
@@ -267,8 +268,8 @@ bool Interpreter::Expression(string code,map<string,string>&var_map_type,map<str
 {
 
 
-  regex Variabl_IN("\\((\\w+)(>|<|==|>=|<=)(\\w+)\\)");
-  regex nums("\\((\\d+)\\)"); //数字
+  regex Variabl_IN("\\((\\w+)(>|<|==|>=|<=)(\\w+)\\)\\s*");
+  regex nums("\\((\\d+)\\)\\s*"); //数字
   smatch st;
 
   if(regex_match(code,st,Variabl_IN))
@@ -407,6 +408,7 @@ bool Interpreter::Expression(string code,map<string,string>&var_map_type,map<str
     }
   else
     {
+      cout<<code<<endl;
       throw "表达试错误";
     }
 
@@ -544,12 +546,12 @@ void Interpreter::Variable_get(string var,string &str,int &Int,map<string,string
 void Interpreter::implement(string code,map<string,string>&var_map_type,map<string,string>&str_map,map<string,int>&int_map) //其他的函数调用，变量定义匹配
 {
   smatch st1;
-  regex func_impt("\\s*(\\S+)\\((.*?)\\)"); //匹配函数调用
-  regex variable_re("\\s*(整型|字符串)\\s(\\w+)");  //匹配变量定义
-  regex Variable_inte_re("\\s*(整型|字符串)\\s(\\w+)=(\\S+)"); //匹配变量定义同时赋值
-  regex Variable_ass("\\s*(\\w+)=(\\w+)"); //匹配变量赋值
-  regex print_re("\\s*打印\\((\\S+)\\)");//匹配打印
-  regex operation_re("\\s*(\\w+)=(\\S+)"); //运算匹配
+  regex func_impt("\\s*(\\S+)\\((.*?)\\)\\s*"); //匹配函数调用
+  regex variable_re("\\s*(整型|字符串)\\s(\\w+)\\s*");  //匹配变量定义
+  regex Variable_inte_re("\\s*(整型|字符串)\\s(\\w+)=(\\S+)\\s*"); //匹配变量定义同时赋值
+  regex Variable_ass("\\s*(\\w+)=(\\w+)\\s*"); //匹配变量赋值
+  regex print_re("\\s*打印\\((\\S+)\\)\\s*");//匹配打印
+  regex operation_re("\\s*(\\w+)=(\\S+)\\s*"); //运算匹配
    if(regex_match(code,st1,func_impt)&&st1[1]!="打印")  //匹配到函数调用
     {
       string impt_code;

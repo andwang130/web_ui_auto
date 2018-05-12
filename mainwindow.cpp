@@ -22,19 +22,49 @@ MainWindow::~MainWindow()
   Psti=0;
 }
 
-
+void MainWindow::svae_code()
+{
+  ofstream  of;
+  of.open(path,ios::out);
+  string code=ui->code_text->toPlainText().toLocal8Bit();
+  of<<code;
+  of.close();
+}
 void MainWindow::on_pushButton_clicked()
 {
 
-
+  if(!path.empty())
+    {
+    svae_code();
   try{
-
-   integ->run("C:/Users/me/Desktop/plan.txt");
+   integ->run(path);
   }
   catch(const char* e)
   {
     cout<<e<<endl;
+    QString eer=QString(QString::fromLocal8Bit(e));
+    ui->code_text_2->setText(eer);
   }
+    }
+  else
+    {
+      QString fileName = QFileDialog::getSaveFileName(this,
+              tr("Open Config"),
+              "",
+              tr("Config Files (*.txt)"));
+      if(!fileName.isNull()) //fileName是文件名
+        {
+          qDebug()<<"*************************"<<endl;
+          ofstream  of;
+          string filename=fileName.toLocal8Bit();
+          of.open(filename,ios::out);
+          string code=ui->code_text->toPlainText().toLocal8Bit();
+          of<<code;
+          of.close();
+          path=filename;
+          on_pushButton_clicked();
+        }
+    }
 
 }
 
@@ -154,3 +184,46 @@ void MainWindow::on_while_butto_clicked()
    QString code=QString("循环(\%1\)\n{\n\n}\n").arg(while_num);
    ui->code_text->textCursor().insertText(code);
 }
+void MainWindow::actionopen_clickde()
+{
+  QFileDialog *filedialog=new QFileDialog(this);//实例一个文件选择对话框
+  filedialog->setWindowTitle(tr("选择图片"));  //设置窗口的标题
+  filedialog->setDirectory(".");//设置默认路径
+  filedialog->setNameFilter(tr("Images(*.png *.jpg *.jpeg *.bmp)"));  //设置文件过滤器
+  if(filedialog->exec()) //exec显示，判断是否打开成功
+  {
+   QStringList fileName=filedialog->selectedFiles();//获取到文件路径
+   if(!fileName.empty())
+     {
+     path=fileName[0].toStdString();
+     }
+  }
+  delete filedialog;
+}
+
+void MainWindow::on_actionopen_triggered()
+{
+  QFileDialog *filedialog=new QFileDialog(this);//实例一个文件选择对话框
+  filedialog->setWindowTitle(tr("选择图片"));  //设置窗口的标题
+  filedialog->setDirectory(".");//设置默认路径
+  filedialog->setNameFilter(tr("Images(*.txt)"));  //设置文件过滤器
+  if(filedialog->exec()) //exec显示，判断是否打开成功
+  {
+   QStringList fileName=filedialog->selectedFiles();//获取到文件路径
+   if(!fileName.empty())
+     {
+     path=fileName[0].toLocal8Bit();
+     }
+  }
+
+  delete filedialog;
+  fstream f;
+  f.open(path,ios::in);
+  string code;
+  while(getline(f,code))
+    {
+      QString Qcode=QString(QString::fromLocal8Bit(code.c_str()));
+      ui->code_text->insertPlainText(Qcode+'\n');
+    }
+}
+
